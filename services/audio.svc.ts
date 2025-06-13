@@ -1,8 +1,8 @@
-import { AudioDAO } from '../../dao/audio.dao';
-import { logger } from '../logger';
+import { AudioDAO } from '@/dao/audio.dao';
+import { CreateAudioFileData, UpdateAudioFileData } from '@/interface/audioFile';
+import { logger } from '@/lib/logger-edge';
 import fs from 'fs/promises';
 import path from 'path';
-import { CreateAudioFileData, UpdateAudioFileData } from '../../interface/audioFile';
 
 export class AudioService {
   private audioDAO: AudioDAO;

@@ -2,7 +2,7 @@ import { Action } from '@prisma/client';
 import { UserProfile, UserAccount } from '../interface/user';
 import { logger } from '../lib/logger';
 import { prisma } from '../lib/prisma';
-import { AuditService } from '../lib/services/audit.svc';
+import { AuditService } from '@/services/audit.svc';
 
 export class UserDAO {
   private auditService: AuditService;
@@ -208,7 +208,7 @@ export class UserDAO {
         update: data,
         create: {
           accountId,
-          ...data
+          ...data as UserProfile
         }
       });
 

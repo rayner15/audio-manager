@@ -1,12 +1,14 @@
+import { UserDAO } from '@/dao/user.dao';
+import { RegisterUserInput, UserResponse, UserAccount } from '@/interface/user';
+import { logger } from '@/lib/logger-edge';
+import { UserProfile } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import {
-  UserProfile,
-  RegisterUserInput,
-  UserAccount,
-  UserResponse
-} from '../../interface/user';
-import { logger } from '../logger';
-import { UserDAO } from '../../dao/user.dao';
+
+type ProfileData = {
+  firstName?: string | null;
+  lastName?: string | null;
+};
+
 
 export class UserService {
   private userDAO: UserDAO;
@@ -137,9 +139,12 @@ export class UserService {
   /**
    * Create user profile
    */
-  async createUserProfile(accountId: number, data: UserProfile) {
+  async createUserProfile(accountId: number, data: ProfileData) {
     try {
-      const profile = await this.userDAO.createProfile(accountId, data);
+      const profile = await this.userDAO.createProfile(accountId, {
+        firstName: data.firstName || '',
+        lastName: data.lastName || ''
+      });
 
       logger.info({
         msg: '/api/user/profile -> created user profile successfully',
@@ -161,9 +166,12 @@ export class UserService {
   /**
    * Update user profile
    */
-  async updateUserProfile(accountId: number, data: UserProfile) {
+  async updateUserProfile(accountId: number, data: ProfileData) {
     try {
-      const profile = await this.userDAO.updateProfile(accountId, data);
+      const profile = await this.userDAO.updateProfile(accountId, {
+        firstName: data.firstName || '',
+        lastName: data.lastName || ''
+      });
 
       logger.info({
         msg: '/api/user/profile/me -> updated user profile successfully',

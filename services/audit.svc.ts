@@ -1,5 +1,5 @@
-import { AuditDAO } from '../../dao/audit.dao';
-import { AuditLogData } from '../../interface/audit';
+import { AuditDAO } from "@/dao/audit.dao";
+import { AuditLogData } from "@/interface/audit";
 
 export class AuditService {
   private auditDAO: AuditDAO;

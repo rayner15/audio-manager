@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { AudioService } from '../../../lib/services/audio.svc';
 import { logger } from '../../../lib/logger';
+import { AudioService } from '@/services/audio.svc';
 
 const audioService = new AudioService();
 
