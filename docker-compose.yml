@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      # Next.js will connect to MySQL at the "db" service on port 3306
+      DATABASE_URL: mysql://audiomanager:audiomanager123@db:3306/audiomanager
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: your-super-secret-nextauth-secret-key-here-change-in-production
+      JWT_SECRET: your-jwt-secret-key-here-change-in-production
+      MAX_FILE_SIZE: 26214400
+      UPLOAD_DIR: ./uploads
+      RATE_LIMIT_WINDOW_MS: 900000
+      RATE_LIMIT_MAX_REQUESTS: 100
+    depends_on:
+      - db
+    volumes:
+      - audio_uploads:/app/uploads
+      - audio_logs:/app/logs
+
+  db:
+    image: mysql:8.0.36
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: audiomanager
+      MYSQL_USER: audiomanager
+      MYSQL_PASSWORD: audiomanager123
+    volumes:
+      - audio_mysql_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+volumes:
+  audio_mysql_data:
+  audio_uploads:
+  audio_logs: 
