@@ -46,7 +46,7 @@ export default function LoginPage() {
     <Layout backgroundType="purple">
       <div className="flex items-center justify-center min-h-screen">
         <div className="w-full max-w-md px-4">
-          <Logo />
+          <Logo title="Audio World" description="Sign in to manage your audio collection"/>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
