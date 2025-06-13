@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model Account {
+    id            Int          @id @default(autoincrement())
+    username      String       @unique
+    email         String       @unique
+    password_hash String
+    createdAt     DateTime     @default(now()) @map("created_at")
+    updatedAt     DateTime     @updatedAt @map("updated_at")
+    profile       UserProfile?
+    audioFiles    AudioFile[]
+    auditLogs     AuditLog[]
+
+    @@map("ACCOUNT")
+}
+
+model UserProfile {
+    id        Int      @id @default(autoincrement())
+    accountId Int      @unique @map("account_id")
+    account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+    firstName String?  @map("first_name")
+    lastName  String?  @map("last_name")
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    @@map("USER_PROFILE")
+}
+
+model Category {
+    id         Int         @id @default(autoincrement())
+    name       String      @unique
+    audioFiles AudioFile[]
+
+    @@map("CATEGORY")
+}
+
+model AudioFile {
+    id          Int      @id @default(autoincrement())
+    accountId   Int      @map("account_id")
+    account     Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+    categoryId  Int      @map("category_id")
+    category    Category @relation(fields: [categoryId], references: [id])
+    fileName    String   @map("file_name")
+    filePath    String   @map("file_path")
+    description String?  @db.Text
+    mimeType    String   @map("mime_type")
+    sizeBytes   Int      @map("size_bytes")
+    uploadedAt  DateTime @default(now()) @map("uploaded_at")
+
+    @@map("AUDIO_FILES")
+}
+
+model AuditLog {
+    id        BigInt   @id @default(autoincrement())
+    accountId Int?     @map("account_id")
+    account   Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+    action    Action
+    entity    String
+    entityId  Int?     @map("entity_id")
+    details   Json?
+    timestamp DateTime @default(now())
+
+    @@map("AUDIT_LOG")
+}
+
+enum Action {
+    CREATE
+    READ
+    UPDATE
+    DELETE
+}
