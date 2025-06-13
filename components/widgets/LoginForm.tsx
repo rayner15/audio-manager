@@ -14,11 +14,7 @@ interface LoginFormData {
   password: string;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({
-  onSubmit,
-  isLoading,
-  error,
-}) => {
+const LoginForm = ({ onSubmit, isLoading, error }: LoginFormProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const methods = useForm<LoginFormData>();
 
