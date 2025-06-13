@@ -11,7 +11,7 @@ import {
   ClockIcon,
 } from "lucide-react";
 import { formatFileSize, formatDate } from "../../utils/common";
-import GlassCardV2 from "./GlassCardV2";
+import GlassCard from "./GlassCard";
 
 interface AudioFile {
   id: number;
@@ -236,7 +236,7 @@ const AudioPlayer = ({ file, onDelete }: AudioPlayerProps) => {
   const handleDownload = () => window.open(downloadUrl, "_blank");
   const handleDelete = () => onDelete(file.id);
   return (
-    <GlassCardV2 className="w-full" style={{ width: "100%" }}>
+    <GlassCard className="w-full" style={{ width: "100%" }}>
       <audio
         ref={audioRef}
         src={audioUrl}
@@ -336,7 +336,7 @@ const AudioPlayer = ({ file, onDelete }: AudioPlayerProps) => {
           </div>
         </div>
       )}
-    </GlassCardV2>
+    </GlassCard>
   );
 };
 
