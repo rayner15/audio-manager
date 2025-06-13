@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { UserService } from '../../../lib/services/user.svc';
 import { logger } from '../../../lib/logger';
+import { UserService } from '@/services/user.svc';
 
 const userService = new UserService();
 
