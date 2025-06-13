@@ -1,44 +1,44 @@
-'use client';
+"use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { motion } from 'framer-motion';
-import { signIn } from 'next-auth/react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { motion } from "framer-motion";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-import { LoginFormData } from '@/interface/login';
-import Layout from '../components/widgets/Layout';
+import { LoginFormData } from "@/interface/login";
+import Layout from "../components/widgets/Layout";
 import Logo from "@/components/widgets/Logo";
 import Footer from "@/components/widgets/Footer";
-import LoginForm from "@/components/ui/LoginForm";
+import LoginForm from "@/components/widgets/LoginForm";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
-    setError('');
-    
+    setError("");
+
     try {
-      const result = await signIn('credentials', {
+      const result = await signIn("credentials", {
         redirect: false,
         username: data.username,
         password: data.password,
       });
-      
+
       if (result?.error) {
-        setError('Invalid username or password');
+        setError("Invalid username or password");
         setIsLoading(false);
       } else {
-        router.push('/dashboard');
+        router.push("/dashboard");
       }
     } catch (error) {
-      setError('An error occurred during login');
+      setError("An error occurred during login");
       setIsLoading(false);
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -46,7 +46,10 @@ export default function LoginPage() {
     <Layout backgroundType="purple">
       <div className="flex items-center justify-center min-h-screen">
         <div className="w-full max-w-md px-4">
-          <Logo title="Audio World" description="Sign in to manage your audio collection"/>
+          <Logo
+            title="Audio World"
+            description="Sign in to manage your audio collection"
+          />
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -54,7 +57,7 @@ export default function LoginPage() {
           >
             <Card className="p-8 apple-card">
               <CardContent className="p-0">
-                <LoginForm 
+                <LoginForm
                   onSubmit={onSubmit}
                   isLoading={isLoading}
                   error={error}
@@ -77,4 +80,3 @@ export default function LoginPage() {
     </Layout>
   );
 }
-

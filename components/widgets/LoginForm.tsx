@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
-import Form from '@/components/form/Form';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
+import Form from "@/components/form/Form";
 
 interface LoginFormProps {
   onSubmit: (data: LoginFormData) => void;
@@ -14,7 +14,11 @@ interface LoginFormData {
   password: string;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading, error }) => {
+const LoginForm: React.FC<LoginFormProps> = ({
+  onSubmit,
+  isLoading,
+  error,
+}) => {
   const [isVisible, setIsVisible] = useState(false);
   const methods = useForm<LoginFormData>();
 
@@ -27,10 +31,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading, error }) => 
           <p className="text-red-600 text-sm font-medium">{error}</p>
         </div>
       )}
-      
-      <Form 
-        useFormMethods={methods} 
-        onSubmit={methods.handleSubmit(onSubmit)} 
+
+      <Form
+        useFormMethods={methods}
+        onSubmit={methods.handleSubmit(onSubmit)}
         className="space-y-6 relative z-20"
       >
         <div className="space-y-4">
@@ -38,7 +42,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading, error }) => 
             name="username"
             label="Username"
             placeholder="Enter your username"
-            rules={{ required: 'Username is required' }}
+            rules={{ required: "Username is required" }}
           />
 
           <Form.Input
@@ -46,7 +50,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading, error }) => 
             label="Password"
             placeholder="Enter your password"
             type={isVisible ? "text" : "password"}
-            rules={{ required: 'Password is required' }}
+            rules={{ required: "Password is required" }}
             icon={
               <button
                 type="button"
@@ -62,7 +66,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading, error }) => 
             }
           />
         </div>
-        
+        <div className="h-px bg-gray-200"></div>
+
         <Form.Button
           type="submit"
           disabled={isLoading}
@@ -71,11 +76,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading, error }) => 
           variant="gradient"
           className="relative z-20"
         >
-          {isLoading ? 'Signing in...' : 'Sign In'}
+          {isLoading ? "Signing in..." : "Sign In"}
         </Form.Button>
+        <div className="h-px bg-gray-200"></div>
       </Form>
     </>
   );
 };
 
-export default LoginForm; 
+export default LoginForm;

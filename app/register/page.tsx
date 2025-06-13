@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import Form from "@/components/form/Form";
 import { Card, CardContent } from "@/components/ui/card";
 import Logo from "@/components/widgets/Logo";
+import { MIN_PASSWORD_LENGTH } from "@/constants/register";
 
 interface RegisterFormData {
   username: string;
@@ -54,8 +55,8 @@ export default function RegisterPage() {
     if (!data.username.trim()) return "Username is required";
     if (!data.email.trim()) return "Email is required";
     if (!data.password) return "Password is required";
-    if (data.password.length < 6)
-      return "Password must be at least 6 characters";
+    if (data.password.length < MIN_PASSWORD_LENGTH)
+      return `Password must be at least ${MIN_PASSWORD_LENGTH} characters`;
     if (data.password !== data.confirmPassword) return "Passwords do not match";
     if (!data.firstName.trim()) return "First name is required";
     if (!data.lastName.trim()) return "Last name is required";
@@ -143,7 +144,6 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* Floating Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 float">
           <SparklesIcon className="w-6 h-6 text-purple-300 opacity-60" />
@@ -234,13 +234,6 @@ export default function RegisterPage() {
                   label="Password"
                   type={isVisible ? "text" : "password"}
                   placeholder="Create a secure password"
-                  rules={{
-                    required: "Password is required",
-                    minLength: {
-                      value: 6,
-                      message: "Password must be at least 6 characters",
-                    },
-                  }}
                   icon={
                     <button
                       type="button"
