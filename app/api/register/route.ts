@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '../../../lib/logger';
 import { UserService } from '@/services/user.svc';
+import { RegisterUserInput } from '@/interface/user';
 
 const userService = new UserService();
 
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
       password,
       firstName,
       lastName
-    });
+    } as RegisterUserInput);
 
     return NextResponse.json({
       message: 'User registered successfully',
