@@ -4,14 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import UploadAudioModal from "@/components/widgets/UploadAudioModal";
 import { motion } from "framer-motion";
-import "../../styles/glass.css";
-import LiquidGlass from "liquid-glass-react";
 import { MusicIcon, UploadIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Layout from "../../components/widgets/Layout";
 import NavigationBar from "../../components/widgets/NavigationBar";
+import "../../styles/glass.css";
 import AudioLibrary from "../components/AudioLibrary";
 
 interface AudioFile {
@@ -113,11 +112,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <Layout
-      backgroundType="blue"
-      backgroundImage="/black-white.jpeg"
-      useGradient={true}
-    >
+    <Layout backgroundType="blue" useGradient={true}>
       <div className="relative w-full h-full min-h-screen">
         <div className="relative z-10">
           <NavigationBar />
@@ -145,18 +140,6 @@ export default function DashboardPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
               >
-                <LiquidGlass
-                  displacementScale={64}
-                  blurAmount={0.1}
-                  saturation={130}
-                  aberrationIntensity={2}
-                  elasticity={0.35}
-                  cornerRadius={100}
-                  padding="8px 16px"
-                  onClick={() => console.log("Button clicked!")}
-                >
-                  <span className="text-white font-medium">Click Me</span>
-                </LiquidGlass>
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden w-full">
                   <div className="p-6 pb-4 border-b border-gray-200">
                     <div className="flex items-center justify-between w-full">

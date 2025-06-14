@@ -20,11 +20,11 @@ export default function Layout({
   const getBackgroundGradient = () => {
     switch (backgroundType) {
       case "dark":
-        return "from-gray-900 via-gray-800 to-gray-900";
+        return "from-gray-900 via-black to-gray-900";
       case "purple":
         return "from-purple-100 via-pink-100 to-indigo-100";
       case "blue":
-        return "from-slate-50 via-blue-50 to-indigo-50";
+        return "from-slate-500 via-blue-500 to-indigo-500";
       case "green":
         return "from-green-50 via-emerald-50 to-teal-50";
       default:
@@ -43,7 +43,7 @@ export default function Layout({
           src={backgroundImage}
           alt="Background"
           fill
-          className="object-cover opacity-20 z-0"
+          className="object-cover opacity-80 z-0"
           priority
         />
       )}
