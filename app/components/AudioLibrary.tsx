@@ -2,7 +2,9 @@ import { Button } from "@/components/ui/button";
 import { UploadIcon } from "lucide-react";
 import StaticGlassCard from "@/components/widgets/StaticGlassCard";
 import AudioFiles from "./AudioFiles";
+import CategoryFilter from "./CategoryFilter";
 import { motion } from "framer-motion";
+import { useState, useMemo } from "react";
 
 interface AudioFile {
   id: number;
@@ -24,6 +26,25 @@ export default function AudioLibrary({
   onDelete,
   onUploadClick,
 }: AudioLibraryProps) {
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+
+  // Extract unique categories from audio files
+  const categories = useMemo(() => {
+    const uniqueCategories = new Map();
+    audioFiles.forEach((file) => {
+      if (!uniqueCategories.has(file.category.id)) {
+        uniqueCategories.set(file.category.id, file.category);
+      }
+    });
+    return Array.from(uniqueCategories.values());
+  }, [audioFiles]);
+
+  // Filter audio files by selected category
+  const filteredAudioFiles = useMemo(() => {
+    if (selectedCategory === null) return audioFiles;
+    return audioFiles.filter((file) => file.category.id === selectedCategory);
+  }, [audioFiles, selectedCategory]);
+
   return (
     <motion.div
       className="col-span-1 xl:col-span-4"
@@ -39,7 +60,7 @@ export default function AudioLibrary({
                 Your Audio Library
               </h2>
               <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                {audioFiles.length} files
+                {filteredAudioFiles.length} files
               </span>
             </div>
             <Button
@@ -51,7 +72,14 @@ export default function AudioLibrary({
             </Button>
           </div>
         </div>
-        <AudioFiles audioFiles={audioFiles} onDelete={onDelete} />
+
+        <CategoryFilter
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+        />
+
+        <AudioFiles audioFiles={filteredAudioFiles} onDelete={onDelete} />
       </StaticGlassCard>
     </motion.div>
   );

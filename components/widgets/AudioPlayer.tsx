@@ -11,13 +11,14 @@ import {
   ClockIcon,
 } from "lucide-react";
 import { formatFileSize, formatDate } from "../../utils/common";
+import { getCategoryColor } from "../../utils/audio";
 import GlassCard from "./GlassCard";
 
 interface AudioFile {
   id: number;
   fileName: string;
   description?: string;
-  category: { name: string };
+  category: { id: number; name: string };
   sizeBytes: number;
   uploadedAt: string;
 }
@@ -282,6 +283,9 @@ const AudioPlayer = ({ file, onDelete }: AudioPlayerProps) => {
   const handleDownload = () => window.open(downloadUrl, "_blank");
   const handleDelete = () => onDelete(file.id);
 
+  // Use category id or default to 0 if not available
+  const categoryId = file.category.id || 0;
+
   return (
     <GlassCard className="w-full" style={{ width: "100%" }}>
       <audio
@@ -308,7 +312,13 @@ const AudioPlayer = ({ file, onDelete }: AudioPlayerProps) => {
             </div>
           </div>
           <div className="flex items-center gap-4 text-sm flex-wrap">
-            <span className="bg-white/20 text-white px-2 py-1 rounded-md text-xs font-medium backdrop-blur-sm">
+            <span
+              className="px-2 py-1 rounded-md text-xs font-medium backdrop-blur-sm text-white"
+              style={{
+                backgroundColor: getCategoryColor(categoryId),
+                boxShadow: "0 1px 2px rgba(0, 0, 0, 0.1)",
+              }}
+            >
               {file.category.name}
             </span>
             <div className="flex items-center gap-1 text-white/80">
