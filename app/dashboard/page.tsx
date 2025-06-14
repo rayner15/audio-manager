@@ -5,17 +5,13 @@ import { Progress } from "@/components/ui/progress";
 import UploadAudioModal from "@/components/widgets/UploadAudioModal";
 import { motion } from "framer-motion";
 import "../../styles/glass.css";
-import {
-  LogOutIcon,
-  MusicIcon,
-  SettingsIcon,
-  UploadIcon,
-  UserIcon,
-} from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
+import LiquidGlass from "liquid-glass-react";
+import { MusicIcon, UploadIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Layout from "../../components/widgets/Layout";
+import NavigationBar from "../../components/widgets/NavigationBar";
 import AudioLibrary from "../components/AudioLibrary";
 
 interface AudioFile {
@@ -31,7 +27,6 @@ export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [audioFiles, setAudioFiles] = useState<AudioFile[]>([]);
-  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const onOpen = () => setIsOpen(true);
@@ -48,28 +43,6 @@ export default function DashboardPage() {
       fetchAudioFiles();
     }
   }, [session]);
-
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      const dropdown = document.getElementById("user-dropdown");
-      const profileButton = document.getElementById("profile-button");
-
-      if (
-        profileDropdownOpen &&
-        dropdown &&
-        !dropdown.contains(event.target as Node) &&
-        profileButton &&
-        !profileButton.contains(event.target as Node)
-      ) {
-        setProfileDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, [profileDropdownOpen]);
 
   const handleDeleteAudio = async (fileId: number) => {
     if (confirm("Are you sure you want to delete this audio file?")) {
@@ -104,29 +77,31 @@ export default function DashboardPage() {
 
   if (status === "loading") {
     return (
-      <Layout backgroundType="blue">
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <motion.div
-              className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 mx-auto"
-              animate={{
-                scale: [1, 1.05, 1],
-                rotate: [0, 2, 0, -2, 0],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              <MusicIcon className="w-10 h-10 text-white" />
-            </motion.div>
-            <div className="w-64 mb-4">
-              <Progress className="h-2" value={90} />
+      <Layout backgroundType="blue" useGradient={true}>
+        <div className="relative w-full h-full min-h-screen">
+          <div className="flex items-center justify-center min-h-screen relative z-10">
+            <div className="text-center">
+              <motion.div
+                className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 mx-auto"
+                animate={{
+                  scale: [1, 1.05, 1],
+                  rotate: [0, 2, 0, -2, 0],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                <MusicIcon className="w-10 h-10 text-white" />
+              </motion.div>
+              <div className="w-64 mb-4">
+                <Progress className="h-2" value={90} />
+              </div>
+              <p className="text-gray-600 font-medium">
+                Loading your audio hub...
+              </p>
             </div>
-            <p className="text-gray-600 font-medium">
-              Loading your audio hub...
-            </p>
           </div>
         </div>
       </Layout>
@@ -138,139 +113,78 @@ export default function DashboardPage() {
   }
 
   return (
-    <Layout backgroundType="blue">
-      <div className="sticky top-0 z-50 w-full">
-        <div className="backdrop-blur-lg bg-white/70 border-b border-gray-200 shadow-sm">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 justify-between items-center">
-              <div className="flex items-center gap-3">
-                <motion.div
-                  className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center"
-                  whileHover={{ scale: 1.05, rotate: 5 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                >
-                  <MusicIcon className="w-6 h-6 text-white" />
-                </motion.div>
-                <div>
-                  <p className="font-bold text-xl bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                    Audio Hub
-                  </p>
-                  <p className="text-xs text-gray-500 font-medium">
-                    Professional
-                  </p>
-                </div>
-              </div>
-              <div className="relative">
-                <motion.button
-                  id="profile-button"
-                  className="flex items-center focus:outline-none relative"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                >
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold border-2 border-white shadow-md transition-all duration-200 hover:shadow-lg">
-                    {session.user?.name?.[0] ||
-                      (session.user as any)?.username?.[0] ||
-                      "U"}
-                  </div>
-                  {profileDropdownOpen && (
-                    <motion.span
-                      className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border border-white"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ duration: 0.2 }}
-                    />
-                  )}
-                </motion.button>
+    <Layout
+      backgroundType="blue"
+      backgroundImage="/black-white.jpeg"
+      useGradient={true}
+    >
+      <div className="relative w-full h-full min-h-screen">
+        <div className="relative z-10">
+          <NavigationBar />
+          <div className="container mx-auto px-6 py-10">
+            {/* Welcome Section */}
+            <motion.div
+              className="mb-10"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Welcome back,{" "}
+                {session.user?.name || (session.user as any)?.username}
+              </h1>
+              <p className="text-gray-600 font-medium">
+                Manage your audio collection with ease
+              </p>
+            </motion.div>
 
-                <div
-                  id="user-dropdown"
-                  className={`${
-                    profileDropdownOpen
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 -translate-y-2 pointer-events-none"
-                  } absolute right-0 mt-2 w-56 rounded-xl bg-white/95 backdrop-blur-lg shadow-lg border border-gray-200 overflow-hidden z-50 transition-all duration-200 ease-in-out`}
+            <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+              <motion.div
+                className="col-span-1 xl:col-span-4"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+              >
+                <LiquidGlass
+                  displacementScale={64}
+                  blurAmount={0.1}
+                  saturation={130}
+                  aberrationIntensity={2}
+                  elasticity={0.35}
+                  cornerRadius={100}
+                  padding="8px 16px"
+                  onClick={() => console.log("Button clicked!")}
                 >
-                  <div className="p-4 border-b border-gray-200">
-                    <p className="text-sm text-gray-600">Signed in as</p>
-                    <p className="font-medium text-blue-600">
-                      {(session.user as any)?.username || session.user?.name}
-                    </p>
+                  <span className="text-white font-medium">Click Me</span>
+                </LiquidGlass>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden w-full">
+                  <div className="p-6 pb-4 border-b border-gray-200">
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-4">
+                        <h2 className="text-xl font-bold text-gray-900">
+                          Your Audio Library
+                        </h2>
+                        <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                          {audioFiles.length} files
+                        </span>
+                      </div>
+                      <Button
+                        variant="outline"
+                        className="flex items-center"
+                        onClick={onOpen}
+                      >
+                        <UploadIcon className="w-4 h-4 mr-2" /> Upload
+                      </Button>
+                    </div>
                   </div>
-                  <div className="p-2">
-                    <button className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 rounded-lg transition-colors duration-150 ease-in-out">
-                      <UserIcon className="h-4 w-4" />
-                      <span>Profile Settings</span>
-                    </button>
-                    <button className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 rounded-lg transition-colors duration-150 ease-in-out">
-                      <SettingsIcon className="h-4 w-4" />
-                      <span>Account Settings</span>
-                    </button>
-                    <button
-                      className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-150 ease-in-out"
-                      onClick={() => signOut()}
-                    >
-                      <LogOutIcon className="h-4 w-4" />
-                      <span>Sign Out</span>
-                    </button>
-                  </div>
+                  <AudioLibrary
+                    audioFiles={audioFiles}
+                    onDelete={handleDeleteAudio}
+                  />
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-6 py-10">
-        {/* Welcome Section */}
-        <motion.div
-          className="mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back,{" "}
-            {session.user?.name || (session.user as any)?.username}
-          </h1>
-          <p className="text-gray-600 font-medium">
-            Manage your audio collection with ease
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
-          <motion.div
-            className="col-span-1 xl:col-span-4"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-          >
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden w-full">
-              <div className="p-6 pb-4 border-b border-gray-200">
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center gap-4">
-                    <h2 className="text-xl font-bold text-gray-900">
-                      Your Audio Library
-                    </h2>
-                    <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                      {audioFiles.length} files
-                    </span>
-                  </div>
-                  <Button
-                    variant="outline"
-                    className="flex items-center"
-                    onClick={onOpen}
-                  >
-                    <UploadIcon className="w-4 h-4 mr-2" /> Upload
-                  </Button>
-                </div>
-              </div>
-              <AudioLibrary
-                audioFiles={audioFiles}
-                onDelete={handleDeleteAudio}
-              />
-            </div>
-          </motion.div>
         </div>
       </div>
 
