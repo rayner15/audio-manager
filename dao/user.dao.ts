@@ -113,64 +113,7 @@ export class UserDAO {
     }
   }
 
-  async updateUser(id: string, data: UserAccount) {
-    try {
-      const user = await prisma.account.update({
-        where: { id },
-        data,
-        include: {
-          profile: true
-        }
-      });
 
-      await this.auditService.logAuditEvent({
-        accountId: id,
-        action: Action.UPDATE,
-        entity: 'Account',
-        entityId: id,
-        details: data
-      });
-
-      this.logSuccess('User account updated', {
-        accountId: id,
-        updates: data
-      });
-
-      return user;
-    } catch (error) {
-      this.logError('Error updating user account', error, { accountId: id });
-      throw error;
-    }
-  }
-
-  async deleteUser(id: string) {
-    try {
-      const user = await prisma.account.delete({
-        where: { id },
-        include: {
-          profile: true
-        }
-      });
-
-      await this.auditService.logAuditEvent({
-        accountId: id,
-        action: Action.DELETE,
-        entity: 'Account',
-        entityId: id,
-        details: { username: user.username, email: user.email }
-      });
-
-      this.logSuccess('User account deleted', {
-        accountId: id,
-        username: user.username
-      });
-
-      return user;
-    } catch (error) {
-      this.logError('Error deleting user account', error, { accountId: id });
-      throw error;
-    }
-  }
 
   async createProfile(accountId: string, data: UserProfile) {
     try {
@@ -201,37 +144,6 @@ export class UserDAO {
     }
   }
 
-  async updateProfile(accountId: string, data: UserProfile) {
-    try {
-      const profile = await prisma.userProfile.upsert({
-        where: { accountId },
-        update: data,
-        create: {
-          accountId,
-          ...data as UserProfile
-        }
-      });
-
-      await this.auditService.logAuditEvent({
-        accountId,
-        action: Action.UPDATE,
-        entity: 'UserProfile',
-        entityId: profile.id,
-        details: data
-      });
-
-      this.logSuccess('User profile updated', {
-        accountId,
-        profileId: profile.id,
-        updates: data
-      });
-
-      return profile;
-    } catch (error) {
-      this.logError('Error updating user profile', error, { accountId });
-      throw error;
-    }
-  }
 
   private logSuccess(message: string, data: any) {
     logger.info({

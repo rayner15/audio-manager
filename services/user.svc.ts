@@ -52,89 +52,9 @@ export class UserService {
     }
   }
 
-  /**
-   * Get user profile by ID
-   */
-  async getUserProfile(accountId: string): Promise<UserResponse> {
-    try {
-      const user = await this.userDAO.getUserById(accountId);
-      
-      if (!user) {
-        throw new Error('User not found');
-      }
 
-      logger.info({
-        msg: '/api/user/me -> fetched user profile successfully',
-        accountId
-      });
 
-      return this.formatUserResponse(user);
-    } catch (error) {
-      logger.error({
-        msg: 'Error fetching user profile',
-        error: error instanceof Error ? error.message : 'Unknown error',
-        accountId
-      });
-      throw error;
-    }
-  }
 
-  /**
-   * Update user credentials
-   */
-  async updateUserCredentials(
-    accountId: string, 
-    data: { username?: string; email?: string; password?: string }
-  ): Promise<UserResponse> {
-    const updateData = await this.prepareCredentialsUpdate(accountId, data);
-    
-    try {
-      const user = await this.userDAO.updateUser(accountId, updateData);
-
-      logger.info({
-        msg: '/api/user/me -> updated user credentials successfully',
-        accountId,
-        updates: Object.keys(updateData)
-      });
-
-      return this.formatUserResponse(user);
-    } catch (error) {
-      logger.error({
-        msg: 'Error updating user credentials',
-        error: error instanceof Error ? error.message : 'Unknown error',
-        accountId
-      });
-      throw error;
-    }
-  }
-
-  /**
-   * Delete user account
-   */
-  async deleteUserAccount(accountId: string): Promise<UserResponse> {
-    try {
-      const user = await this.userDAO.deleteUser(accountId);
-
-      logger.info({
-        msg: '/api/user/me -> deleted user account successfully',
-        accountId,
-        username: user.username
-      });
-
-      return {
-        id: user.id,
-        username: user.username,
-        email: user.email
-      };
-    } catch (error) {
-      logger.error({
-        msg: 'Error deleting user account',
-        error: error instanceof Error ? error.message : 'Unknown error',
-        accountId
-      });
-      throw error;
-    }
-  }
 
   /**
    * Create user profile
@@ -163,32 +83,6 @@ export class UserService {
     }
   }
 
-  /**
-   * Update user profile
-   */
-  async updateUserProfile(accountId: string, data: ProfileData) {
-    try {
-      const profile = await this.userDAO.updateProfile(accountId, {
-        firstName: data.firstName || '',
-        lastName: data.lastName || ''
-      });
-
-      logger.info({
-        msg: '/api/user/profile/me -> updated user profile successfully',
-        accountId,
-        profileId: profile.id
-      });
-
-      return profile;
-    } catch (error) {
-      logger.error({
-        msg: 'Error updating user profile',
-        error: error instanceof Error ? error.message : 'Unknown error',
-        accountId
-      });
-      throw error;
-    }
-  }
 
   // Helper methods
   private validateUserCredentials(data: { username?: string; email?: string; password?: string }) {
@@ -233,60 +127,7 @@ export class UserService {
     return this.userDAO.createUser(userData);
   }
 
-  private async prepareCredentialsUpdate(
-    accountId: string,
-    data: { username?: string; email?: string; password?: string }
-  ): Promise<UserAccount> {
-    const updateData: UserAccount = {
-      username: '',
-      email: '',
-      password_hash: ''
-    };
-    
-    this.validateUserCredentials(data);
-    if (data.username !== undefined || data.email !== undefined) {
-      const checkData = {
-        username: data.username,
-        email: data.email
-      };
-      
-      await this.checkExistingCredentialsForUpdate(accountId, checkData);
-    }
 
-    // Prepare update data
-    if (data.username !== undefined) {
-      updateData.username = data.username;
-    }
-
-    if (data.email !== undefined) {
-      updateData.email = data.email;
-    }
-
-    if (data.password !== undefined) {
-      updateData.password_hash = await bcrypt.hash(data.password, 12);
-    }
-
-    return updateData;
-  }
-
-  private async checkExistingCredentialsForUpdate(
-    accountId: string,
-    data: { username?: string; email?: string }
-  ) {
-    if (data.username) {
-      const existingUser = await this.userDAO.getUserByUsername(data.username);
-      if (existingUser && existingUser.id !== accountId) {
-        throw new Error('Username already exists');
-      }
-    }
-
-    if (data.email) {
-      const existingUser = await this.userDAO.getUserByEmail(data.email);
-      if (existingUser && existingUser.id !== accountId) {
-        throw new Error('Email already exists');
-      }
-    }
-  }
 
   private formatUserResponse(user: any): UserResponse {
     return {

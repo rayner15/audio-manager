@@ -4,10 +4,12 @@ import { motion } from "framer-motion";
 import { LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function NavigationBar() {
   const { data: session } = useSession();
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -30,6 +32,11 @@ export default function NavigationBar() {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, [profileDropdownOpen]);
+
+  const navigateToPage = (path: string) => {
+    setProfileDropdownOpen(false);
+    router.push(path);
+  };
 
   return (
     <div className="sticky top-0 z-50 w-full">
@@ -96,11 +103,17 @@ export default function NavigationBar() {
                     </p>
                   </div>
                   <div className="p-2">
-                    <button className="flex w-full items-center gap-2 px-4 py-2 text-sm text-white hover:bg-white/10 rounded-lg transition-colors duration-150 ease-in-out">
+                    <button
+                      className="flex w-full items-center gap-2 px-4 py-2 text-sm text-white hover:bg-white/10 rounded-lg transition-colors duration-150 ease-in-out"
+                      onClick={() => navigateToPage("/settings/profile")}
+                    >
                       <UserIcon className="h-4 w-4" />
                       <span>Profile Settings</span>
                     </button>
-                    <button className="flex w-full items-center gap-2 px-4 py-2 text-sm text-white hover:bg-white/10 rounded-lg transition-colors duration-150 ease-in-out">
+                    <button
+                      className="flex w-full items-center gap-2 px-4 py-2 text-sm text-white hover:bg-white/10 rounded-lg transition-colors duration-150 ease-in-out"
+                      onClick={() => navigateToPage("/settings/account")}
+                    >
                       <SettingsIcon className="h-4 w-4" />
                       <span>Account Settings</span>
                     </button>

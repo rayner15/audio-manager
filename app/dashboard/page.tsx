@@ -2,8 +2,9 @@
 
 import { Progress } from "@/components/ui/progress";
 import UploadAudioModal from "@/components/widgets/UploadAudioModal";
+import { AudioFile } from "@/interface/audioFile";
 import { motion } from "framer-motion";
-import { MusicIcon, Sparkles } from "lucide-react";
+import { MusicIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -11,7 +12,6 @@ import Layout from "../../components/widgets/Layout";
 import NavigationBar from "../../components/widgets/NavigationBar";
 import "../../styles/glass.css";
 import AudioLibrary from "../components/AudioLibrary";
-import { AudioFile } from "@/interface/audioFile";
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
@@ -128,12 +128,6 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="flex items-center gap-2 mb-1">
-                <Sparkles className="h-5 w-5 text-blue-200" />
-                <p className="text-blue-200 text-sm font-medium tracking-wide uppercase">
-                  Dashboard
-                </p>
-              </div>
               <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">
                 Welcome back,{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-purple-200">

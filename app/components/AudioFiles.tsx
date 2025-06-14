@@ -19,7 +19,7 @@ export default function AudioFiles({
     <div className="px-4 pb-4">
       {audioFiles.length === 0 ? (
         <motion.div
-          className="text-center py-12"
+          className="text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}

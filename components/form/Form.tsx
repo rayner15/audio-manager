@@ -1,24 +1,24 @@
-import React from 'react';
-import { FormProvider, UseFormReturn } from 'react-hook-form';
-import Input from './Input';
-import Button from './Button';
+import React from "react";
+import { FormProvider, UseFormReturn } from "react-hook-form";
+import Input from "./Input";
+import Button from "./Button";
 
 interface FormProps {
   children: React.ReactNode;
-  useFormMethods: UseFormReturn<any>;
-  onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void> | void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   className?: string;
+  useFormMethods: UseFormReturn<any>;
 }
 
 const Form = ({
   children,
-  useFormMethods,
   onSubmit,
-  className = '',
+  className = "",
+  useFormMethods,
 }: FormProps) => {
   return (
     <FormProvider {...useFormMethods}>
-      <form className={`flex flex-col ${className}`} onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className={className}>
         {children}
       </form>
     </FormProvider>
@@ -29,4 +29,4 @@ const Form = ({
 Form.Input = Input;
 Form.Button = Button;
 
-export default Form; 
+export default Form;
