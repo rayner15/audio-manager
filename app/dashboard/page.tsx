@@ -1,10 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import UploadAudioModal from "@/components/widgets/UploadAudioModal";
 import { motion } from "framer-motion";
-import { MusicIcon, UploadIcon } from "lucide-react";
+import { MusicIcon, Sparkles } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -81,7 +80,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-center min-h-screen relative z-10">
             <div className="text-center">
               <motion.div
-                className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 mx-auto"
+                className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg"
                 animate={{
                   scale: [1, 1.05, 1],
                   rotate: [0, 2, 0, -2, 0],
@@ -97,7 +96,7 @@ export default function DashboardPage() {
               <div className="w-64 mb-4">
                 <Progress className="h-2" value={90} />
               </div>
-              <p className="text-gray-600 font-medium">
+              <p className="text-white font-medium">
                 Loading your audio hub...
               </p>
             </div>
@@ -124,49 +123,28 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <div className="flex items-center gap-2 mb-1">
+                <Sparkles className="h-5 w-5 text-blue-200" />
+                <p className="text-blue-200 text-sm font-medium tracking-wide uppercase">
+                  Dashboard
+                </p>
+              </div>
+              <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">
                 Welcome back,{" "}
-                {session.user?.name || (session.user as any)?.username}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-purple-200">
+                  {session.user?.name || (session.user as any)?.username}
+                </span>
               </h1>
-              <p className="text-gray-600 font-medium">
+              <p className="text-white/80 font-light text-lg">
                 Manage your audio collection with ease
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
-              <motion.div
-                className="col-span-1 xl:col-span-4"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-              >
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden w-full">
-                  <div className="p-6 pb-4 border-b border-gray-200">
-                    <div className="flex items-center justify-between w-full">
-                      <div className="flex items-center gap-4">
-                        <h2 className="text-xl font-bold text-gray-900">
-                          Your Audio Library
-                        </h2>
-                        <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                          {audioFiles.length} files
-                        </span>
-                      </div>
-                      <Button
-                        variant="outline"
-                        className="flex items-center"
-                        onClick={onOpen}
-                      >
-                        <UploadIcon className="w-4 h-4 mr-2" /> Upload
-                      </Button>
-                    </div>
-                  </div>
-                  <AudioLibrary
-                    audioFiles={audioFiles}
-                    onDelete={handleDeleteAudio}
-                  />
-                </div>
-              </motion.div>
-            </div>
+            <AudioLibrary
+              audioFiles={audioFiles}
+              onDelete={handleDeleteAudio}
+              onUploadClick={onOpen}
+            />
           </div>
         </div>
       </div>

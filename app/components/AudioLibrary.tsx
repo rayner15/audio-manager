@@ -1,5 +1,8 @@
-import { MusicIcon } from "lucide-react";
-import AudioPlayer from "@/components/widgets/AudioPlayer";
+import { Button } from "@/components/ui/button";
+import { UploadIcon } from "lucide-react";
+import StaticGlassCard from "@/components/widgets/StaticGlassCard";
+import AudioFiles from "./AudioFiles";
+import { motion } from "framer-motion";
 
 interface AudioFile {
   id: number;
@@ -13,33 +16,43 @@ interface AudioFile {
 interface AudioLibraryProps {
   audioFiles: AudioFile[];
   onDelete: (fileId: number) => Promise<void>;
+  onUploadClick: () => void;
 }
 
 export default function AudioLibrary({
   audioFiles,
   onDelete,
+  onUploadClick,
 }: AudioLibraryProps) {
   return (
-    <div className="glass-container">
-      {audioFiles.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="w-24 h-24 bg-gray-100/20 backdrop-blur-lg rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/30">
-            <MusicIcon className="h-12 w-12 text-white" />
+    <motion.div
+      className="col-span-1 xl:col-span-4"
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5, delay: 0.5 }}
+    >
+      <StaticGlassCard>
+        <div className="px-4 py-2">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-4">
+              <h2 className="text-xl text-white font-bold">
+                Your Audio Library
+              </h2>
+              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                {audioFiles.length} files
+              </span>
+            </div>
+            <Button
+              variant="outline"
+              className="flex items-center bg-white/10 hover:bg-white/20 text-white border-white/30"
+              onClick={onUploadClick}
+            >
+              <UploadIcon className="w-4 h-4 mr-2" /> Upload
+            </Button>
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">
-            No audio files yet
-          </h3>
-          <p className="text-white/80 mb-8">
-            Upload your first audio file to get started
-          </p>
         </div>
-      ) : (
-        <div className="flex flex-col gap-6 w-full">
-          {audioFiles.map((file) => (
-            <AudioPlayer key={file.id} file={file} onDelete={onDelete} />
-          ))}
-        </div>
-      )}
-    </div>
+        <AudioFiles audioFiles={audioFiles} onDelete={onDelete} />
+      </StaticGlassCard>
+    </motion.div>
   );
 }

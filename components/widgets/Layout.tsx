@@ -3,6 +3,7 @@
 import React, { ReactNode } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import "../../styles/glass.css";
 
 interface LayoutProps {
   children: ReactNode;
@@ -24,7 +25,7 @@ export default function Layout({
       case "purple":
         return "from-purple-100 via-pink-100 to-indigo-100";
       case "blue":
-        return "from-slate-500 via-blue-500 to-indigo-500";
+        return "glass-background";
       case "green":
         return "from-green-50 via-emerald-50 to-teal-50";
       default:
@@ -37,6 +38,16 @@ export default function Layout({
       className={`min-h-screen relative overflow-hidden ${
         useGradient ? `bg-gradient-to-br ${getBackgroundGradient()}` : ""
       }`}
+      style={
+        backgroundType === "blue" && useGradient
+          ? {
+              background: `radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
+                linear-gradient(155deg, #3730a3 0%, #1e40af 50%, #00d4ff 100%)`,
+            }
+          : {}
+      }
     >
       {backgroundImage && (
         <Image
@@ -49,7 +60,7 @@ export default function Layout({
       )}
 
       {/* Ambient Light Effects */}
-      {useGradient && (
+      {useGradient && backgroundType !== "blue" && (
         <div className="absolute inset-0 pointer-events-none z-10">
           <div className="absolute top-0 left-0 w-full h-full">
             <motion.div
