@@ -34,7 +34,7 @@ async function main() {
 
   // Create default user with fixed UUID
   console.log('👤 Creating default user...');
-  const hashedPassword = await bcrypt.hash('johndoe123', 12);
+  const hashedPassword = await bcrypt.hash('johndoe12345', 12);
   
   const defaultUser = await prisma.account.upsert({
     where: { id:"d18dc4fd-1824-42df-8796-c34186bcedec" },
