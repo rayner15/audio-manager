@@ -27,6 +27,51 @@ interface AudioPlayerProps {
   onDelete: (id: number) => void;
 }
 
+interface AudioControlsProps {
+  isPlaying: boolean;
+  isLoading: boolean;
+  progress: number;
+  currentTime: string;
+  duration: string;
+  shouldShow: boolean;
+}
+
+const AudioControls = ({
+  isPlaying,
+  isLoading,
+  progress,
+  currentTime,
+  duration,
+  shouldShow,
+}: AudioControlsProps) => {
+  return (
+    <div
+      className={`transition-all duration-300 ease-in-out ${
+        shouldShow ? "max-h-24 opacity-100" : "max-h-0 opacity-0"
+      }`}
+    >
+      <div className="flex items-center">
+        <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm">
+          {isLoading ? (
+            <div className="h-full bg-white/40 w-1/4 animate-pulse rounded-full"></div>
+          ) : (
+            <div
+              className="h-full bg-gradient-to-r from-white/60 to-white/80 rounded-full transition-all duration-100 ease-linear"
+              style={{ width: `${progress}%` }}
+            ></div>
+          )}
+        </div>
+        <div className="text-xs text-white/80 font-medium w-20 text-right">
+          {isLoading ? "Loading..." : `${currentTime} / ${duration}`}
+        </div>
+      </div>
+      <div className="mt-2 text-xs text-white/80">
+        {isPlaying ? "Playing" : isLoading ? "Loading..." : "Paused"}
+      </div>
+    </div>
+  );
+};
+
 const globalAudioContext = {
   currentPlayingId: null as number | null,
   stopCurrentAudio: () => {},
@@ -134,6 +179,7 @@ const useAudioPlayer = (file: AudioFile) => {
         setState((prev) => ({
           ...prev,
           isPlaying: false,
+          hasStartedPlaying: false, // Reset hasStartedPlaying when audio ends
           progress: 0,
           currentTime: "0:00",
         }));
@@ -235,6 +281,7 @@ const AudioPlayer = ({ file, onDelete }: AudioPlayerProps) => {
 
   const handleDownload = () => window.open(downloadUrl, "_blank");
   const handleDelete = () => onDelete(file.id);
+
   return (
     <GlassCard className="w-full" style={{ width: "100%" }}>
       <audio
@@ -314,28 +361,14 @@ const AudioPlayer = ({ file, onDelete }: AudioPlayerProps) => {
           )}
         </div>
       </div>
-      {(isPlaying || isLoading || (hasStartedPlaying && !isPlaying)) && (
-        <div className="mt-3 pt-3 border-t border-white/20">
-          <div className="flex items-center gap-2">
-            <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm">
-              {isLoading ? (
-                <div className="h-full bg-white/40 w-1/4 animate-pulse rounded-full"></div>
-              ) : (
-                <div
-                  className="h-full bg-gradient-to-r from-white/60 to-white/80 rounded-full transition-all duration-100 ease-linear"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              )}
-            </div>
-            <div className="text-xs text-white/80 font-medium w-20 text-right">
-              {isLoading ? "Loading..." : `${currentTime} / ${duration}`}
-            </div>
-          </div>
-          <div className="mt-2 text-xs text-white/80">
-            {isPlaying ? "Playing" : isLoading ? "Loading..." : "Paused"}
-          </div>
-        </div>
-      )}
+      <AudioControls
+        isPlaying={isPlaying}
+        isLoading={isLoading}
+        progress={progress}
+        currentTime={currentTime}
+        duration={duration}
+        shouldShow={isPlaying || (hasStartedPlaying && !isPlaying)}
+      />
     </GlassCard>
   );
 };
