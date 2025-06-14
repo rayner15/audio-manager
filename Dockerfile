@@ -56,9 +56,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 RUN mkdir -p uploads logs
 RUN chown -R nextjs:nodejs uploads logs .next
 
-# Copy entrypoint script - explicitly copy from local context
-COPY entrypoint.sh /app/
-RUN chmod +x /app/entrypoint.sh
+# Copy entrypoint script
+COPY --chown=nextjs:nodejs docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
 
 USER nextjs
 
@@ -67,4 +67,4 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-ENTRYPOINT ["/app/entrypoint.sh"] 
+ENTRYPOINT ["/app/docker-entrypoint.sh"] 
