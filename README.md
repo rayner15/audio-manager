@@ -32,7 +32,7 @@ Create a `.env` file in the root directory:
 ```bash
 # Create .env file with required configuration
 cat > .env << EOL
-DATABASE_URL="mysql://root:root123@db:3306/audioworld"
+DATABASE_URL=mysql://root:root123@localhost:3308/audioworld
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="your-super-secret-nextauth-secret-key-here"
 JWT_SECRET="your-jwt-secret-key-here"
@@ -102,9 +102,9 @@ docker compose up db -d
 docker ps
 ```
 
-#### 2. Install Dependencies
+#### 2. Install Dependencies and Build the Application
 ```bash
-npm install
+npm install && npm run build
 ```
 
 #### 3. Run Database Migrations
