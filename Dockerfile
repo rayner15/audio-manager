@@ -52,6 +52,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 # Copy node_modules (including Prisma)
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 
+# Copy uploads directory
+COPY --chown=nextjs:nodejs uploads ./uploads
+
 # Create directories and set permissions
 RUN mkdir -p uploads logs
 RUN chown -R nextjs:nodejs uploads logs .next
