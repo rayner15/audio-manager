@@ -5,7 +5,7 @@ A modern, full-stack web application for uploading, managing, and playing audio 
 ## 🚀 Features
 
 - **User Authentication**: Secure login/registration with NextAuth.js and JWT
-- **Audio File Management**: Upload, organize, and manage audio files (MP3, WAV, M4A)
+- **Audio File Management**: Upload, organize, and manage audio files (MP3 and WAV)
 - **Category System**: Organize audio files by categories (Podcast, Music, Interview, etc.)
 - **Audio Playback**: Built-in audio player for listening to uploaded files
 - **User Profiles**: Manage user profiles and account settings
@@ -15,43 +15,33 @@ A modern, full-stack web application for uploading, managing, and playing audio 
 ## 📋 Prerequisites
 
 - **Node.js** 18+ 
-- **Docker** and **Docker Compose**
-- **Git**
+- **Docker** - [Download Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- **Git** - [Download Git](https://git-scm.com/downloads)
 
 ## 🚀 Quick Start with Docker
 
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/rayner15/audio-manager.git
 cd audio-manager
 ```
 
 ### 2. Environment Configuration
-Create a `.env.local` file in the root directory:
+Create a `.env` file in the root directory:
 
-```env
-# Database
+```bash
+# Create .env file with required configuration
+cat > .env << EOL
 DATABASE_URL="mysql://root:root123@db:3306/audioworld"
-
-# NextAuth
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="your-super-secret-nextauth-secret-key-here"
-
-# JWT
 JWT_SECRET="your-jwt-secret-key-here"
-
-# File Upload
-MAX_FILE_SIZE=26214400
-UPLOAD_DIR="./uploads"
+EOL
 ```
 
 ### 3. Start the Application
 ```bash
-# Build and start all services
 docker compose up --build
-
-# Or run in detached mode
-docker compose up --build -d
 ```
 
 ### 4. Access the Application
@@ -61,8 +51,8 @@ docker compose up --build -d
 ## 🔐 Default Login Credentials
 
 ```
-Username: admin
-Password: password123
+Username: john_doe
+Password: johndoe123
 ```
 
 ## 🐳 Docker Commands
@@ -83,6 +73,58 @@ docker compose exec app sh
 # Access database
 docker compose exec db mysql -u root -p
 ```
+
+## 🔧 Troubleshooting
+
+### 1. Windows Docker Issues
+
+If you encounter this specific ❌ error when running Docker:
+```diff
+- app-1  | exec /app/docker-entrypoint.sh: no such file or directory
+```
+
+Open Git Bash in Windows, navigate to your project directory, and run:
+```bash
+cd /path/to/audio-manager
+dos2unix docker-entrypoint.sh
+```
+
+### 2. Running App Locally with Docker Database
+
+If you want to run just the database in Docker and the app locally:
+
+#### 1. Start MySQL Database in Docker
+```bash
+# Start only the database container in detached mode
+docker compose up db -d
+
+# Verify the database is running
+docker ps
+```
+
+#### 2. Install Dependencies
+```bash
+npm install
+```
+
+#### 3. Run Database Migrations
+```bash
+npx prisma migrate dev --name init
+```
+
+#### 4. Seed the Database
+```bash
+npx prisma db seed
+```
+
+#### 5. Start the Development Server
+```bash
+npm run dev
+```
+
+#### 6. Access the Application
+- **Web Application**: http://localhost:3000
+- **MySQL Database**: localhost:3308 (user: root, password: root123)
 
 ## 🎵 Supported Audio Formats
 
