@@ -78,33 +78,26 @@ RATE_LIMIT_WINDOW_MS=900000
 RATE_LIMIT_MAX_REQUESTS=100
 ```
 
-### 3. Build and Start with Docker Compose
+### 3. Start with a Single Command
 ```bash
-# Build and start all services
+# Build and start all services with automatic database setup
 docker-compose up --build
 
 # Or run in detached mode
 docker-compose up --build -d
 ```
 
-### 4. Initialize Database
-Once the containers are running, initialize the database:
+That's it! The application will:
+1. Start the MySQL database
+2. Wait for the database to be ready
+3. Run database migrations automatically
+4. Seed the database with default data
+5. Start the Next.js application
 
-```bash
-# Access the web container
-docker-compose exec web sh
-
-# Run database migrations
-npx prisma db push
-
-# Seed the database with default data
-npm run db:seed
-```
-
-### 5. Access the Application
+### 4. Access the Application
 - **Web Application**: http://localhost:3000
 - **MySQL Database**: localhost:3307
-- **Prisma Studio**: Run `npm run db:studio` for database GUI
+- **Prisma Studio**: Run `npm run db:studio` for database GUI (requires local Node.js)
 
 ## 🔐 Default Login Credentials
 
@@ -231,17 +224,17 @@ Maximum file size: **25MB**
 ## 🐳 Docker Commands
 
 ```bash
-# Build and start services
+# Build and start services (single command setup)
 docker-compose up --build
 
 # Stop services
 docker-compose down
 
 # View logs
-docker-compose logs -f web
+docker-compose logs -f app
 
-# Access web container shell
-docker-compose exec web sh
+# Access app container shell
+docker-compose exec app sh
 
 # Access database
 docker-compose exec db mysql -u audiomanager -p audiomanager
@@ -310,7 +303,7 @@ This project is licensed under the MIT License.
 
 ### Getting Help
 
-- Check the logs: `docker-compose logs -f web`
+- Check the logs: `docker-compose logs -f app`
 - Review the database: `npm run db:studio`
 - Verify environment variables
 - Check file permissions
