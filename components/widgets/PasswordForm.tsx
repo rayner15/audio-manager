@@ -90,7 +90,7 @@ const PasswordForm = () => {
           <button
             type="button"
             onClick={() => toggleVisibility("currentPassword")}
-            className="text-gray-400 hover:text-purple-500 focus:outline-none transition-colors duration-200"
+            className="text-gray-400 hover:text-blue-500 focus:outline-none transition-colors duration-200"
           >
             {passwordVisibility.currentPassword ? (
               <EyeOffIcon className="h-5 w-5" />
@@ -117,7 +117,7 @@ const PasswordForm = () => {
           <button
             type="button"
             onClick={() => toggleVisibility("newPassword")}
-            className="text-gray-400 hover:text-purple-500 focus:outline-none transition-colors duration-200"
+            className="text-gray-400 hover:text-blue-500 focus:outline-none transition-colors duration-200"
           >
             {passwordVisibility.newPassword ? (
               <EyeOffIcon className="h-5 w-5" />
@@ -142,7 +142,7 @@ const PasswordForm = () => {
           <button
             type="button"
             onClick={() => toggleVisibility("confirmPassword")}
-            className="text-gray-400 hover:text-purple-500 focus:outline-none transition-colors duration-200"
+            className="text-gray-400 hover:text-blue-500 focus:outline-none transition-colors duration-200"
           >
             {passwordVisibility.confirmPassword ? (
               <EyeOffIcon className="h-5 w-5" />
