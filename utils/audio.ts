@@ -8,16 +8,14 @@
  * @returns A CSS rgba color string
  */
 export const getCategoryColor = (categoryId: number): string => {
-  // Rotate through these colors based on category ID with higher opacity
   const colors = [
-    "rgba(255, 182, 193, 0.7)", // Light pink
     "rgba(173, 216, 230, 0.7)", // Light blue
     "rgba(152, 251, 152, 0.7)", // Light green
-    "rgba(255, 218, 185, 0.7)", // Peach
-    "rgba(221, 160, 221, 0.7)", // Plum
     "rgba(176, 224, 230, 0.7)", // Powder blue
+    "rgba(221, 160, 221, 0.7)", // Plum
+    "rgba(255, 218, 185, 0.7)", // Peach
   ];
   
-  return colors[categoryId % colors.length];
+  return colors[categoryId - 1];
 };
 

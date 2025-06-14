@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { UploadIcon } from "lucide-react";
 import StaticGlassCard from "@/components/widgets/StaticGlassCard";
+import { motion } from "framer-motion";
+import { UploadIcon } from "lucide-react";
+import { useMemo, useState } from "react";
 import AudioFiles from "./AudioFiles";
 import CategoryFilter from "./CategoryFilter";
-import { motion } from "framer-motion";
-import { useState, useMemo } from "react";
 
 interface AudioFile {
   id: number;
@@ -28,7 +28,6 @@ export default function AudioLibrary({
 }: AudioLibraryProps) {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
-  // Extract unique categories from audio files
   const categories = useMemo(() => {
     const uniqueCategories = new Map();
     audioFiles.forEach((file) => {
