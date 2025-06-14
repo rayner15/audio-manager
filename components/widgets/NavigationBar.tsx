@@ -1,9 +1,9 @@
 "use client";
 
-import { LogOutIcon, MusicIcon, SettingsIcon, UserIcon } from "lucide-react";
+import { motion } from "framer-motion";
+import { LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 export default function NavigationBar() {
   const { data: session } = useSession();
@@ -35,8 +35,8 @@ export default function NavigationBar() {
     <div className="sticky top-0 z-50 w-full">
       <div className="backdrop-blur-xl bg-white/10 border-b border-white/20 shadow-md">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 justify-between items-center">
-            <div className="flex items-center gap-3">
+          <div className="flex h-16 justify-end items-center">
+            {/* <div className="flex items-center gap-3">
               <motion.div
                 className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg"
                 whileHover={{ scale: 1.05, rotate: 5 }}
@@ -56,7 +56,7 @@ export default function NavigationBar() {
                   Professional
                 </p>
               </div>
-            </div>
+            </div> */}
             {session && (
               <div className="relative">
                 <motion.button

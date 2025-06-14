@@ -81,7 +81,7 @@
   color: white;
 }
 
-.glass-card::before {
+/* .glass-card::before {
   content: "";
   position: absolute;
   top: 0;
@@ -98,7 +98,7 @@
   border-radius: inherit;
   pointer-events: none;
   opacity: 0.8;
-}
+} */
 
 .glass-card:hover {
   transform: translateY(-10px);
