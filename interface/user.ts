@@ -19,7 +19,7 @@ export interface RegisterUserInput extends UserAccount{
 }
 
 export interface UserResponse {
-  id: number;
+  id: string;
   username: string;
   email: string;
   profile?: any;

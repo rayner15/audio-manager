@@ -1,8 +1,8 @@
+import { AuditService } from '@/services/audit.svc';
 import { Action } from '@prisma/client';
 import { CreateAudioFileData, UpdateAudioFileData } from '../interface/audioFile';
 import { logger } from '../lib/logger';
 import { prisma } from '../lib/prisma';
-import { AuditService } from '@/services/audit.svc';
 
 export class AudioDAO {
   private auditService: AuditService;
@@ -14,7 +14,15 @@ export class AudioDAO {
   async createAudioFile(data: CreateAudioFileData) {
     try {
       const audioFile = await prisma.audioFile.create({
-        data,
+        data: {
+          accountId: data.accountId,
+          categoryId: data.categoryId,
+          fileName: data.fileName,
+          filePath: data.filePath,
+          description: data.description,
+          mimeType: data.mimeType,
+          sizeBytes: data.sizeBytes
+        },
         include: {
           category: true,
           account: {
@@ -52,7 +60,7 @@ export class AudioDAO {
     }
   }
 
-  async getAudioFilesByAccount(accountId: number) {
+  async getAudioFilesByAccount(accountId: string) {
     try {
       const audioFiles = await prisma.audioFile.findMany({
         where: { accountId },
@@ -81,7 +89,7 @@ export class AudioDAO {
     }
   }
 
-  async getAudioFileById(id: number, accountId: number) {
+  async getAudioFileById(id: string, accountId: string) {
     try {
       const audioFile = await prisma.audioFile.findFirst({
         where: {
@@ -122,14 +130,16 @@ export class AudioDAO {
     }
   }
 
-  async updateAudioFile(id: number, accountId: number, data: UpdateAudioFileData) {
+  async updateAudioFile(id: string, accountId: string, data: UpdateAudioFileData) {
     try {
       const audioFile = await prisma.audioFile.update({
         where: {
-          id,
-          accountId
+          id
         },
-        data,
+        data: {
+          description: data.description,
+          categoryId: data.categoryId
+        },
         include: {
           category: true
         }
@@ -163,12 +173,18 @@ export class AudioDAO {
     }
   }
 
-  async deleteAudioFile(id: number, accountId: number) {
+  async deleteAudioFile(id: string, accountId: string) {
     try {
+      // First find the file to get its details
+      const fileToDelete = await this.getAudioFileById(id, accountId);
+      
+      if (!fileToDelete) {
+        throw new Error('Audio file not found or access denied');
+      }
+      
       const audioFile = await prisma.audioFile.delete({
         where: {
-          id,
-          accountId
+          id
         }
       });
 

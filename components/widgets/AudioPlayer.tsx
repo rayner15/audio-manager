@@ -15,17 +15,18 @@ import { getCategoryColor } from "../../utils/audio";
 import GlassCard from "./GlassCard";
 
 interface AudioFile {
-  id: number;
+  id: string;
   fileName: string;
   description?: string;
-  category: { id: number; name: string };
+  category: { id: string; name: string };
   sizeBytes: number;
   uploadedAt: string;
 }
 
 interface AudioPlayerProps {
   file: AudioFile;
-  onDelete: (id: number) => void;
+  onDelete: (id: string) => void;
+  allCategories?: { id: string; name: string }[];
 }
 
 interface AudioControlsProps {
@@ -74,7 +75,7 @@ const AudioControls = ({
 };
 
 const globalAudioContext = {
-  currentPlayingId: null as number | null,
+  currentPlayingId: null as string | null,
   stopCurrentAudio: () => {},
 };
 
@@ -266,7 +267,11 @@ const useAudioPlayer = (file: AudioFile) => {
   };
 };
 
-const AudioPlayer = ({ file, onDelete }: AudioPlayerProps) => {
+const AudioPlayer = ({
+  file,
+  onDelete,
+  allCategories = [],
+}: AudioPlayerProps) => {
   const {
     audioRef,
     isPlaying,
@@ -283,8 +288,7 @@ const AudioPlayer = ({ file, onDelete }: AudioPlayerProps) => {
   const handleDownload = () => window.open(downloadUrl, "_blank");
   const handleDelete = () => onDelete(file.id);
 
-  // Use category id or default to 0 if not available
-  const categoryId = file.category.id || 0;
+  const categoryId = file.category.id;
 
   return (
     <GlassCard className="w-full" style={{ width: "100%" }}>
@@ -315,7 +319,7 @@ const AudioPlayer = ({ file, onDelete }: AudioPlayerProps) => {
             <span
               className="px-2 py-1 rounded-md text-xs font-medium backdrop-blur-sm text-white"
               style={{
-                backgroundColor: getCategoryColor(categoryId),
+                backgroundColor: getCategoryColor(categoryId, allCategories),
                 boxShadow: "0 1px 2px rgba(0, 0, 0, 0.1)",
               }}
             >

@@ -2,14 +2,14 @@ import { useCallback } from "react";
 import { getCategoryColor } from "../../utils/audio";
 
 interface Category {
-  id: number;
+  id: string;
   name: string;
 }
 
 interface CategoryFilterProps {
   categories: Category[];
-  selectedCategory: number | null;
-  onSelectCategory: (categoryId: number | null) => void;
+  selectedCategory: string | null;
+  onSelectCategory: (categoryId: string | null) => void;
 }
 
 export default function CategoryFilter({
@@ -18,15 +18,15 @@ export default function CategoryFilter({
   onSelectCategory,
 }: CategoryFilterProps) {
   const handleCategoryClick = useCallback(
-    (categoryId: number | null) => {
+    (categoryId: string | null) => {
       onSelectCategory(categoryId);
     },
     [onSelectCategory]
   );
 
-  // Get category color with default for categories without IDs
+  // Get category color with categories array
   const getCategoryColorSafe = (category: Category) => {
-    return getCategoryColor(category.id || 0);
+    return getCategoryColor(category.id, categories);
   };
 
   return (

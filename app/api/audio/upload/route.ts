@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
 
       const uniqueFileName = audioService.generateUniqueFileName(
         file.name,
-        parseInt(session.user.id)
+        (session.user.id)
       );
       const filePath = path.join(uploadDir, uniqueFileName);
       
@@ -72,8 +72,8 @@ export async function POST(request: NextRequest) {
       const buffer = Buffer.from(bytes);
       await writeFile(filePath, buffer);
       const audioFile = await audioService.uploadAudioFile({
-        accountId: parseInt(session.user.id),
-        categoryId: parseInt(categoryId),
+        accountId: (session.user.id),
+        categoryId: (categoryId),
         fileName: file.name,
         filePath,
         description: description || undefined,

@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Account {
-    id            Int          @id @default(autoincrement())
+    id            String       @id @default(uuid())
     username      String       @unique
     email         String       @unique
     password_hash String
@@ -25,8 +25,8 @@ model Account {
 }
 
 model UserProfile {
-    id        Int      @id @default(autoincrement())
-    accountId Int      @unique @map("account_id")
+    id        String   @id @default(uuid())
+    accountId String   @unique @map("account_id")
     account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
     firstName String?  @map("first_name")
     lastName  String?  @map("last_name")
@@ -37,7 +37,7 @@ model UserProfile {
 }
 
 model Category {
-    id         Int         @id @default(autoincrement())
+    id         String      @id @default(uuid())
     name       String      @unique
     audioFiles AudioFile[]
 
@@ -45,10 +45,10 @@ model Category {
 }
 
 model AudioFile {
-    id          Int      @id @default(autoincrement())
-    accountId   Int      @map("account_id")
+    id          String   @id @default(uuid())
+    accountId   String   @map("account_id")
     account     Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
-    categoryId  Int      @map("category_id")
+    categoryId  String   @map("category_id")
     category    Category @relation(fields: [categoryId], references: [id])
     fileName    String   @map("file_name")
     filePath    String   @map("file_path")
@@ -57,16 +57,17 @@ model AudioFile {
     sizeBytes   Int      @map("size_bytes")
     uploadedAt  DateTime @default(now()) @map("uploaded_at")
 
+    @@unique([id, accountId])
     @@map("AUDIO_FILES")
 }
 
 model AuditLog {
-    id        BigInt   @id @default(autoincrement())
-    accountId Int?     @map("account_id")
+    id        String   @id @default(uuid())
+    accountId String?  @map("account_id")
     account   Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
     action    Action
     entity    String
-    entityId  Int?     @map("entity_id")
+    entityId  String?  @map("entity_id")
     details   Json?
     timestamp DateTime @default(now())
 

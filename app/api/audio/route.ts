@@ -17,7 +17,7 @@ export async function GET() {
       );
     }
 
-    const audioFiles = await audioService.getUserAudioFiles(parseInt(session.user.id));
+    const audioFiles = await audioService.getUserAudioFiles((session.user.id));
 
     return NextResponse.json({
       audioFiles

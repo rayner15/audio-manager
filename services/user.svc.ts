@@ -55,7 +55,7 @@ export class UserService {
   /**
    * Get user profile by ID
    */
-  async getUserProfile(accountId: number): Promise<UserResponse> {
+  async getUserProfile(accountId: string): Promise<UserResponse> {
     try {
       const user = await this.userDAO.getUserById(accountId);
       
@@ -83,7 +83,7 @@ export class UserService {
    * Update user credentials
    */
   async updateUserCredentials(
-    accountId: number, 
+    accountId: string, 
     data: { username?: string; email?: string; password?: string }
   ): Promise<UserResponse> {
     const updateData = await this.prepareCredentialsUpdate(accountId, data);
@@ -111,7 +111,7 @@ export class UserService {
   /**
    * Delete user account
    */
-  async deleteUserAccount(accountId: number): Promise<UserResponse> {
+  async deleteUserAccount(accountId: string): Promise<UserResponse> {
     try {
       const user = await this.userDAO.deleteUser(accountId);
 
@@ -139,7 +139,7 @@ export class UserService {
   /**
    * Create user profile
    */
-  async createUserProfile(accountId: number, data: ProfileData) {
+  async createUserProfile(accountId: string, data: ProfileData) {
     try {
       const profile = await this.userDAO.createProfile(accountId, {
         firstName: data.firstName || '',
@@ -166,7 +166,7 @@ export class UserService {
   /**
    * Update user profile
    */
-  async updateUserProfile(accountId: number, data: ProfileData) {
+  async updateUserProfile(accountId: string, data: ProfileData) {
     try {
       const profile = await this.userDAO.updateProfile(accountId, {
         firstName: data.firstName || '',
@@ -234,7 +234,7 @@ export class UserService {
   }
 
   private async prepareCredentialsUpdate(
-    accountId: number,
+    accountId: string,
     data: { username?: string; email?: string; password?: string }
   ): Promise<UserAccount> {
     const updateData: UserAccount = {
@@ -270,7 +270,7 @@ export class UserService {
   }
 
   private async checkExistingCredentialsForUpdate(
-    accountId: number,
+    accountId: string,
     data: { username?: string; email?: string }
   ) {
     if (data.username) {

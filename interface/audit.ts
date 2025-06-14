@@ -1,9 +1,9 @@
 import { Action } from '@prisma/client';
 
 export interface AuditLogData {
-  accountId: number;
+  accountId: string;
   action: Action;
   entity: string;
-  entityId: number;
+  entityId: string;
   details?: any;
 }

@@ -6,18 +6,23 @@ import { useMemo, useState } from "react";
 import AudioFiles from "./AudioFiles";
 import CategoryFilter from "./CategoryFilter";
 
+interface Category {
+  id: string;
+  name: string;
+}
+
 interface AudioFile {
-  id: number;
+  id: string;
   fileName: string;
   description?: string;
-  category: { id: number; name: string };
+  category: Category;
   sizeBytes: number;
   uploadedAt: string;
 }
 
 interface AudioLibraryProps {
   audioFiles: AudioFile[];
-  onDelete: (fileId: number) => Promise<void>;
+  onDelete: (fileId: string) => Promise<void>;
   onUploadClick: () => void;
 }
 
@@ -26,7 +31,7 @@ export default function AudioLibrary({
   onDelete,
   onUploadClick,
 }: AudioLibraryProps) {
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const categories = useMemo(() => {
     const uniqueCategories = new Map();
@@ -78,7 +83,11 @@ export default function AudioLibrary({
           onSelectCategory={setSelectedCategory}
         />
 
-        <AudioFiles audioFiles={filteredAudioFiles} onDelete={onDelete} />
+        <AudioFiles
+          audioFiles={filteredAudioFiles}
+          onDelete={onDelete}
+          categories={categories}
+        />
       </StaticGlassCard>
     </motion.div>
   );

@@ -44,7 +44,7 @@ export class UserDAO {
     }
   }
 
-  async getUserById(id: number) {
+  async getUserById(id: string) {
     try {
       const user = await prisma.account.findUnique({
         where: { id },
@@ -113,7 +113,7 @@ export class UserDAO {
     }
   }
 
-  async updateUser(id: number, data: UserAccount) {
+  async updateUser(id: string, data: UserAccount) {
     try {
       const user = await prisma.account.update({
         where: { id },
@@ -143,7 +143,7 @@ export class UserDAO {
     }
   }
 
-  async deleteUser(id: number) {
+  async deleteUser(id: string) {
     try {
       const user = await prisma.account.delete({
         where: { id },
@@ -172,7 +172,7 @@ export class UserDAO {
     }
   }
 
-  async createProfile(accountId: number, data: UserProfile) {
+  async createProfile(accountId: string, data: UserProfile) {
     try {
       const profile = await prisma.userProfile.create({
         data: {
@@ -201,7 +201,7 @@ export class UserDAO {
     }
   }
 
-  async updateProfile(accountId: number, data: UserProfile) {
+  async updateProfile(accountId: string, data: UserProfile) {
     try {
       const profile = await prisma.userProfile.upsert({
         where: { accountId },

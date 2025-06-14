@@ -2,21 +2,31 @@ import { MusicIcon } from "lucide-react";
 import AudioPlayer from "@/components/widgets/AudioPlayer";
 import { motion, AnimatePresence } from "framer-motion";
 
+interface Category {
+  id: string;
+  name: string;
+}
+
 interface AudioFile {
-  id: number;
+  id: string;
   fileName: string;
   description?: string;
-  category: { id: number; name: string };
+  category: Category;
   sizeBytes: number;
   uploadedAt: string;
 }
 
 interface AudioFilesProps {
   audioFiles: AudioFile[];
-  onDelete: (fileId: number) => Promise<void>;
+  onDelete: (fileId: string) => Promise<void>;
+  categories: Category[];
 }
 
-export default function AudioFiles({ audioFiles, onDelete }: AudioFilesProps) {
+export default function AudioFiles({
+  audioFiles,
+  onDelete,
+  categories,
+}: AudioFilesProps) {
   return (
     <div className="px-4 pb-4">
       {audioFiles.length === 0 ? (
@@ -51,7 +61,11 @@ export default function AudioFiles({ audioFiles, onDelete }: AudioFilesProps) {
                   layout: { type: "spring", stiffness: 300, damping: 30 },
                 }}
               >
-                <AudioPlayer file={file} onDelete={onDelete} />
+                <AudioPlayer
+                  file={file}
+                  onDelete={onDelete}
+                  allCategories={categories}
+                />
               </motion.div>
             ))}
           </AnimatePresence>

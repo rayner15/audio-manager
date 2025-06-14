@@ -21,18 +21,12 @@ export async function GET(
     }
 
     const resolvedParams = await params;
-    const fileId = parseInt(resolvedParams.fileId);
-    if (isNaN(fileId)) {
-      return NextResponse.json(
-        { error: 'Invalid file ID' },
-        { status: 400 }
-      );
-    }
-
+    const fileId = resolvedParams.fileId;
+    
     const audioService = new AudioService();
     const audioFile = await audioService.getAudioFile(
       fileId,
-      parseInt(session.user.id)
+      session.user.id
     );
 
     if (!audioFile) {
@@ -135,13 +129,7 @@ export async function PUT(
     }
 
     const resolvedParams = await params;
-    const fileId = parseInt(resolvedParams.fileId);
-    if (isNaN(fileId)) {
-      return NextResponse.json(
-        { error: 'Invalid file ID' },
-        { status: 400 }
-      );
-    }
+    const fileId = resolvedParams.fileId;
 
     const body = await request.json();
     const { description, categoryId } = body;
@@ -149,10 +137,10 @@ export async function PUT(
     const audioService = new AudioService();
     const updatedFile = await audioService.updateAudioFile(
       fileId,
-      parseInt(session.user.id),
+      session.user.id,
       {
         description: description?.trim() || undefined,
-        categoryId: categoryId ? parseInt(categoryId) : undefined
+        categoryId: categoryId || undefined
       }
     );
 
@@ -188,18 +176,12 @@ export async function DELETE(
     }
 
     const resolvedParams = await params;
-    const fileId = parseInt(resolvedParams.fileId);
-    if (isNaN(fileId)) {
-      return NextResponse.json(
-        { error: 'Invalid file ID' },
-        { status: 400 }
-      );
-    }
+    const fileId = resolvedParams.fileId;
 
     const audioService = new AudioService();
     const success = await audioService.deleteAudioFile(
       fileId,
-      parseInt(session.user.id)
+      session.user.id
     );
 
     if (!success) {

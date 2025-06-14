@@ -1,7 +1,7 @@
 // Database and service interfaces
 export interface CreateAudioFileData {
-  accountId: number;
-  categoryId: number;
+  accountId: string;
+  categoryId: string;
   fileName: string;
   filePath: string;
   description?: string;
@@ -11,7 +11,7 @@ export interface CreateAudioFileData {
 
 export interface UpdateAudioFileData {
   description?: string;
-  categoryId?: number;
+  categoryId?: string;
 }
 
 // Frontend component interfaces
@@ -22,7 +22,7 @@ export interface AudioFile {
 }
 
 export interface AudioCategory {
-  id: number;
+  id: string;
   name: string;
 }
 

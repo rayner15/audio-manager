@@ -41,6 +41,7 @@ export class AudioService {
     }
 
     try {
+      console.log("datadata",data);
       const audioFile = await this.audioDAO.createAudioFile(data);
       
       logger.info({
@@ -72,7 +73,7 @@ export class AudioService {
     }
   }
 
-  async getUserAudioFiles(accountId: number) {
+  async getUserAudioFiles(accountId: string) {
     try {
       const audioFiles = await this.audioDAO.getAudioFilesByAccount(accountId);
       
@@ -93,7 +94,7 @@ export class AudioService {
     }
   }
 
-  async getAudioFile(id: number, accountId: number) {
+  async getAudioFile(id: string, accountId: string) {
     try {
       const audioFile = await this.audioDAO.getAudioFileById(id, accountId);
       
@@ -132,7 +133,7 @@ export class AudioService {
     }
   }
 
-  async updateAudioFile(id: number, accountId: number, data: UpdateAudioFileData) {
+  async updateAudioFile(id: string, accountId: string, data: UpdateAudioFileData) {
     try {
       const audioFile = await this.audioDAO.updateAudioFile(id, accountId, data);
       
@@ -155,7 +156,7 @@ export class AudioService {
     }
   }
 
-  async deleteAudioFile(id: number, accountId: number) {
+  async deleteAudioFile(id: string, accountId: string) {
     try {
       const audioFile = await this.audioDAO.getAudioFileById(id, accountId);
       
@@ -235,12 +236,11 @@ export class AudioService {
     return uploadDir;
   }
 
-  generateUniqueFileName(originalName: string, accountId: number): string {
-    const timestamp = Date.now();
+  generateUniqueFileName(originalName: string, accountId: string): string {
     const extension = path.extname(originalName);
     const baseName = path.basename(originalName, extension);
     const sanitizedBaseName = baseName.replace(/[^a-zA-Z0-9-_]/g, '_');
     
-    return `${accountId}_${timestamp}_${sanitizedBaseName}${extension}`;
+    return `${accountId}_${sanitizedBaseName}${extension}`;
   }
 } 
