@@ -73,7 +73,7 @@ export default function NavigationBar() {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                 >
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold border-2 border-white/70 shadow-md transition-all duration-200 hover:shadow-lg">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-teal-600 flex items-center justify-center text-white font-bold border-2 border-white/70 shadow-md transition-all duration-200 hover:shadow-lg">
                     {session.user?.name?.[0] ||
                       (session.user as any)?.username?.[0] ||
                       "U"}
