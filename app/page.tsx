@@ -44,7 +44,7 @@ export default function LoginPage() {
 
   return (
     <Layout backgroundType="purple">
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen p-[50px]">
         <div className="w-full max-w-md px-4">
           <Logo
             title="Audio World"

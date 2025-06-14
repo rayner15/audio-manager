@@ -59,7 +59,7 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen relative overflow-hidden">
       <AnimatedBackground />
-      <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
+      <div className="relative z-10 flex items-center justify-center min-h-screen p-[50px]">
         <div className="w-full max-w-lg fade-in-up">
           <Logo
             title="Audio World"
