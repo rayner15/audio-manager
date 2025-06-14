@@ -1,24 +1,36 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { AudioCategory, AudioFile, UploadAudioModalProps } from "@/interface/audioFile";
-import { useCallback, useEffect, useState } from 'react';
-import DragDropArea from './DragDropArea';
-import FileDetails from './FileDetails';
-import FileList from './FileList';
-import UploadProgress from './UploadProgress';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  AudioCategory,
+  AudioFileUpload,
+  UploadAudioModalProps,
+} from "@/interface/audioFile";
+import { useCallback, useEffect, useState } from "react";
+import DragDropArea from "./DragDropArea";
+import FileDetails from "./FileDetails";
+import FileList from "./FileList";
+import UploadProgress from "./UploadProgress";
 
 const UploadAudioModal = ({
   open,
   onOpenChange,
   onUploadComplete,
 }: UploadAudioModalProps) => {
-  const [audioFiles, setAudioFiles] = useState<AudioFile[]>([]);
+  const [audioFiles, setAudioFiles] = useState<AudioFileUpload[]>([]);
   const [selectedFileIndex, setSelectedFileIndex] = useState<number>(-1);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [categories, setCategories] = useState<AudioCategory[]>([]);
 
-  const selectedFileWithMetadata = selectedFileIndex >= 0 ? audioFiles[selectedFileIndex] : null;
+  const selectedFileWithMetadata =
+    selectedFileIndex >= 0 ? audioFiles[selectedFileIndex] : null;
 
   useEffect(() => {
     fetchCategories();
@@ -34,56 +46,65 @@ const UploadAudioModal = ({
   }, [audioFiles]);
 
   const handleFilesDrop = useCallback((files: File[]) => {
-    const newFiles: AudioFile[] = files.map(file => ({
+    const newFiles: AudioFileUpload[] = files.map((file) => ({
       file,
-      description: '',
-      categoryId: ''
+      description: "",
+      categoryId: "",
     }));
-    
+
     if (newFiles.length > 0) {
-      setAudioFiles(prev => [...prev, ...newFiles]);
+      setAudioFiles((prev) => [...prev, ...newFiles]);
     }
   }, []);
 
-  const removeFile = useCallback((indexToRemove: number) => {
-    setAudioFiles(prev => prev.filter((_, index) => index !== indexToRemove));
-    
-    if (selectedFileIndex === indexToRemove) {
-      if (audioFiles.length > 1) {
-        // Select the next file, or the previous if removing the last file
-        const nextIndex = indexToRemove < audioFiles.length - 1 ? indexToRemove : indexToRemove - 1;
-        setSelectedFileIndex(nextIndex);
-      } else {
-        setSelectedFileIndex(-1);
+  const removeFile = useCallback(
+    (indexToRemove: number) => {
+      setAudioFiles((prev) =>
+        prev.filter((_, index) => index !== indexToRemove)
+      );
+
+      if (selectedFileIndex === indexToRemove) {
+        if (audioFiles.length > 1) {
+          // Select the next file, or the previous if removing the last file
+          const nextIndex =
+            indexToRemove < audioFiles.length - 1
+              ? indexToRemove
+              : indexToRemove - 1;
+          setSelectedFileIndex(nextIndex);
+        } else {
+          setSelectedFileIndex(-1);
+        }
+      } else if (selectedFileIndex > indexToRemove) {
+        // Adjust the selected index if removing a file before the selected one
+        setSelectedFileIndex(selectedFileIndex - 1);
       }
-    } else if (selectedFileIndex > indexToRemove) {
-      // Adjust the selected index if removing a file before the selected one
-      setSelectedFileIndex(selectedFileIndex - 1);
-    }
-  }, [audioFiles, selectedFileIndex]);
+    },
+    [audioFiles, selectedFileIndex]
+  );
 
-  const updateFile = useCallback((index: number, updates: Partial<AudioFile>) => {
-    setAudioFiles(prev => 
-      prev.map((item, i) => 
-        i === index ? { ...item, ...updates } : item
-      )
-    );
-  }, []);
+  const updateFile = useCallback(
+    (index: number, updates: Partial<AudioFileUpload>) => {
+      setAudioFiles((prev) =>
+        prev.map((item, i) => (i === index ? { ...item, ...updates } : item))
+      );
+    },
+    []
+  );
 
   const handleUpload = async () => {
     setIsUploading(true);
     setUploadProgress(0);
-    
+
     const formData = new FormData();
     audioFiles.forEach((fileWithMeta, index) => {
-      formData.append('files', fileWithMeta.file);
+      formData.append("files", fileWithMeta.file);
       formData.append(`descriptions[${index}]`, fileWithMeta.description);
       formData.append(`categoryIds[${index}]`, fileWithMeta.categoryId);
     });
-    
+
     try {
       const progressInterval = setInterval(() => {
-        setUploadProgress(prev => {
+        setUploadProgress((prev) => {
           if (prev >= 90) {
             clearInterval(progressInterval);
             return prev;
@@ -91,14 +112,14 @@ const UploadAudioModal = ({
           return prev + 10;
         });
       }, 300);
-      
-      const response = await fetch('/api/audio/upload', {
-        method: 'POST',
+
+      const response = await fetch("/api/audio/upload", {
+        method: "POST",
         body: formData,
       });
-      
+
       clearInterval(progressInterval);
-      
+
       if (response.ok) {
         setAudioFiles([]);
         setUploadProgress(100);
@@ -108,28 +129,27 @@ const UploadAudioModal = ({
         }, 800);
       } else {
         const error = await response.json();
-        alert(error.error || 'Upload failed');
+        alert(error.error || "Upload failed");
         setUploadProgress(0);
       }
     } catch (error) {
-      console.error('Upload error:', error);
-      alert('Upload failed');
+      console.error("Upload error:", error);
+      alert("Upload failed");
       setUploadProgress(0);
     } finally {
       setIsUploading(false);
     }
   };
 
-
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/categories');
+      const response = await fetch("/api/categories");
       if (response.ok) {
         const data = await response.json();
         setCategories(data.categories);
       }
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error("Error fetching categories:", error);
     }
   };
 
@@ -145,11 +165,11 @@ const UploadAudioModal = ({
               Add new audio files to your library - supports multiple uploads
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
             <div className="space-y-6">
               <DragDropArea onFilesDrop={handleFilesDrop} />
-              <FileList 
+              <FileList
                 files={audioFiles}
                 selectedIndex={selectedFileIndex}
                 onSelectFile={setSelectedFileIndex}
@@ -157,14 +177,14 @@ const UploadAudioModal = ({
               />
             </div>
             <div className="space-y-6">
-              <FileDetails 
+              <FileDetails
                 selectedFile={selectedFileWithMetadata}
                 categories={categories}
                 selectedIndex={selectedFileIndex}
                 onUpdateFile={updateFile}
               />
-              
-              <UploadProgress 
+
+              <UploadProgress
                 progress={uploadProgress}
                 isUploading={isUploading}
               />
@@ -173,15 +193,16 @@ const UploadAudioModal = ({
           <DialogFooter className="bg-gray-50 px-6 py-4 border-t border-gray-100">
             <div className="flex items-center justify-between w-full">
               <div className="text-sm text-gray-500">
-                {audioFiles.length} {audioFiles.length === 1 ? 'file' : 'files'} selected
+                {audioFiles.length} {audioFiles.length === 1 ? "file" : "files"}{" "}
+                selected
               </div>
-              <Button 
-                type="submit" 
-                onClick={handleUpload} 
+              <Button
+                type="submit"
+                onClick={handleUpload}
                 disabled={isUploading || audioFiles.length === 0}
                 className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
               >
-                {isUploading ? 'Uploading...' : 'Upload Files'}
+                {isUploading ? "Uploading..." : "Upload Files"}
               </Button>
             </div>
           </DialogFooter>
@@ -191,4 +212,4 @@ const UploadAudioModal = ({
   );
 };
 
-export default UploadAudioModal; 
+export default UploadAudioModal;

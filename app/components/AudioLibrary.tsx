@@ -5,23 +5,10 @@ import { UploadIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import AudioFiles from "./AudioFiles";
 import CategoryFilter from "./CategoryFilter";
-
-interface Category {
-  id: string;
-  name: string;
-}
-
-interface AudioFile {
-  id: string;
-  fileName: string;
-  description?: string;
-  category: Category;
-  sizeBytes: number;
-  uploadedAt: string;
-}
+import { AudioFile as AudioFileInterface } from "@/interface/audioFile";
 
 interface AudioLibraryProps {
-  audioFiles: AudioFile[];
+  audioFiles: AudioFileInterface[];
   onDelete: (fileId: string) => Promise<void>;
   onUploadClick: () => void;
 }

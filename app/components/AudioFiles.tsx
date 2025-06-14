@@ -1,20 +1,8 @@
 import { MusicIcon } from "lucide-react";
 import AudioPlayer from "@/components/widgets/AudioPlayer";
 import { motion, AnimatePresence } from "framer-motion";
-
-interface Category {
-  id: string;
-  name: string;
-}
-
-interface AudioFile {
-  id: string;
-  fileName: string;
-  description?: string;
-  category: Category;
-  sizeBytes: number;
-  uploadedAt: string;
-}
+import { Category } from "@prisma/client";
+import { AudioFile } from "@/interface/audioFile";
 
 interface AudioFilesProps {
   audioFiles: AudioFile[];

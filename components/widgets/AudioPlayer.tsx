@@ -13,15 +13,7 @@ import {
 import { formatFileSize, formatDate } from "../../utils/common";
 import { getCategoryColor } from "../../utils/audio";
 import GlassCard from "./GlassCard";
-
-interface AudioFile {
-  id: string;
-  fileName: string;
-  description?: string;
-  category: { id: string; name: string };
-  sizeBytes: number;
-  uploadedAt: string;
-}
+import { AudioFile } from "@/interface/audioFile";
 
 interface AudioPlayerProps {
   file: AudioFile;

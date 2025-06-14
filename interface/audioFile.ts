@@ -15,7 +15,7 @@ export interface UpdateAudioFileData {
 }
 
 // Frontend component interfaces
-export interface AudioFile {
+export interface AudioFileUpload {
   file: File;
   description: string;
   categoryId: string;
@@ -40,17 +40,17 @@ export interface DragDropAreaProps {
 }
 
 export interface FileListProps {
-  files: AudioFile[];
+  files: AudioFileUpload[];
   selectedIndex: number;
   onSelectFile: (index: number) => void;
   onRemoveFile: (index: number) => void;
 }
 
 export interface FileDetailsProps {
-  selectedFile: AudioFile | null;
+  selectedFile: AudioFileUpload | null;
   categories: AudioCategory[];
   selectedIndex: number;
-  onUpdateFile: (index: number, updates: Partial<AudioFile>) => void;
+  onUpdateFile: (index: number, updates: Partial<AudioFileUpload>) => void;
 }
 
 export interface UploadProgressProps {
@@ -58,3 +58,12 @@ export interface UploadProgressProps {
   isUploading: boolean;
 }
 
+// Database audio file model
+export interface AudioFile {
+  id: string;
+  fileName: string;
+  description?: string;
+  category: AudioCategory;
+  sizeBytes: number;
+  uploadedAt: string;
+}

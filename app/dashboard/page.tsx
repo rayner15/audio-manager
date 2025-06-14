@@ -11,15 +11,7 @@ import Layout from "../../components/widgets/Layout";
 import NavigationBar from "../../components/widgets/NavigationBar";
 import "../../styles/glass.css";
 import AudioLibrary from "../components/AudioLibrary";
-
-interface AudioFile {
-  id: number;
-  fileName: string;
-  description?: string;
-  category: { id: number; name: string };
-  sizeBytes: number;
-  uploadedAt: string;
-}
+import { AudioFile } from "@/interface/audioFile";
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
@@ -42,7 +34,7 @@ export default function DashboardPage() {
     }
   }, [session]);
 
-  const handleDeleteAudio = async (fileId: number) => {
+  const handleDeleteAudio = async (fileId: string) => {
     if (confirm("Are you sure you want to delete this audio file?")) {
       try {
         const response = await fetch(`/api/audio/${fileId}`, {
@@ -66,7 +58,20 @@ export default function DashboardPage() {
       const response = await fetch("/api/audio");
       if (response.ok) {
         const data = await response.json();
-        setAudioFiles(data.audioFiles);
+        const transformedFiles: AudioFile[] = data.audioFiles.map(
+          (file: any) => ({
+            id: file.id,
+            fileName: file.fileName,
+            description: file.description,
+            category: {
+              id: file.category.id,
+              name: file.category.name,
+            },
+            sizeBytes: file.sizeBytes,
+            uploadedAt: file.uploadedAt,
+          })
+        );
+        setAudioFiles(transformedFiles);
       }
     } catch (error) {
       console.error("Error fetching audio files:", error);

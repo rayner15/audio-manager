@@ -1,23 +1,29 @@
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { AudioFile, AudioCategory } from '@/interface/audioFile';
+import { AudioCategory, AudioFileUpload } from "@/interface/audioFile";
 import { formatFileSize } from "@/utils/common";
-import { FileIcon } from 'lucide-react';
-import React from 'react';
+import { FileIcon } from "lucide-react";
+import React from "react";
 
 interface FileDetailsProps {
-  selectedFile: AudioFile | null;
+  selectedFile: AudioFileUpload | null;
   categories: AudioCategory[];
   selectedIndex: number;
-  onUpdateFile: (index: number, updates: Partial<AudioFile>) => void;
+  onUpdateFile: (index: number, updates: Partial<AudioFileUpload>) => void;
 }
 
 const FileDetails = ({
   selectedFile,
   categories,
   selectedIndex,
-  onUpdateFile
+  onUpdateFile,
 }: FileDetailsProps) => {
   if (!selectedFile) {
     return (
@@ -36,7 +42,9 @@ const FileDetails = ({
   const { file, description, categoryId } = selectedFile;
   const { name, size } = file;
 
-  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleDescriptionChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     onUpdateFile(selectedIndex, { description: e.target.value });
   };
 
@@ -47,29 +55,28 @@ const FileDetails = ({
   return (
     <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-100 shadow-sm">
       <h3 className="text-sm font-medium text-gray-700 mb-3">File Details</h3>
-      
+
       <div className="space-y-3">
         <div className="space-y-1">
           <Label className="text-xs text-gray-500">File Name</Label>
           <p className="text-sm font-medium text-gray-800 break-all">{name}</p>
         </div>
-        
+
         <div className="space-y-1">
           <Label className="text-xs text-gray-500">Size</Label>
-          <p className="text-sm font-medium text-gray-800">{formatFileSize(size)}</p>
+          <p className="text-sm font-medium text-gray-800">
+            {formatFileSize(size)}
+          </p>
         </div>
-        
+
         <div className="space-y-1">
           <Label htmlFor="category">Category</Label>
-          <Select 
-            value={categoryId} 
-            onValueChange={handleCategoryChange}
-          >
+          <Select value={categoryId} onValueChange={handleCategoryChange}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
-              {categories.map(category => (
+              {categories.map((category) => (
                 <SelectItem key={category.id} value={category.id.toString()}>
                   {category.name}
                 </SelectItem>
@@ -77,7 +84,7 @@ const FileDetails = ({
             </SelectContent>
           </Select>
         </div>
-        
+
         <div className="space-y-1">
           <Label htmlFor="description">Description</Label>
           <Textarea
@@ -93,4 +100,4 @@ const FileDetails = ({
   );
 };
 
-export default FileDetails; 
+export default FileDetails;
