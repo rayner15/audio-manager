@@ -66,8 +66,8 @@ const PasswordForm = () => {
           id: toastId,
         });
       }
-    } catch (_) {
-      console.error("Error updating password");
+    } catch (error) {
+      console.error("Error updating password", error);
       toast.error("An unexpected error occurred", { id: toastId });
     } finally {
       setIsLoading(false);
