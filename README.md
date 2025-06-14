@@ -52,7 +52,7 @@ docker compose up --build
 
 ```
 Username: john_doe
-Password: johndoe123
+Password: johndoe12345
 ```
 
 ## 🐳 Docker Commands
