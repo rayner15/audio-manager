@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Starting Audio Manager application setup..."
+echo "🚀 Starting Audio World application setup..."
 
 echo "🔄 Waiting for database to be ready..."
 # Try to connect to the database with a timeout

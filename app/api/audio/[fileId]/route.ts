@@ -6,6 +6,135 @@ import { stat } from 'fs/promises';
 import path from 'path';
 import { AudioService } from '@/services/audio.svc';
 
+/**
+ * @swagger
+ * /api/audio/{fileId}:
+ *   get:
+ *     summary: Get audio file
+ *     description: Retrieve a specific audio file by ID. Add ?download=true query parameter to download the file.
+ *     tags:
+ *       - Audio
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: fileId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID of the audio file to retrieve
+ *       - in: query
+ *         name: download
+ *         schema:
+ *           type: boolean
+ *         description: Set to true to download the file with attachment header
+ *     responses:
+ *       200:
+ *         description: Audio file streamed successfully
+ *         content:
+ *           audio/mpeg:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *           audio/wav:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *           audio/mp4:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       401:
+ *         description: Unauthorized - User not authenticated
+ *       404:
+ *         description: Audio file not found
+ *       500:
+ *         description: Internal server error
+ *   put:
+ *     summary: Update audio file metadata
+ *     description: Update the description or category of an audio file
+ *     tags:
+ *       - Audio
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: fileId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID of the audio file to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               description:
+ *                 type: string
+ *                 description: New description for the audio file
+ *               categoryId:
+ *                 type: string
+ *                 format: uuid
+ *                 description: New category ID for the audio file
+ *     responses:
+ *       200:
+ *         description: Audio file updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   format: uuid
+ *                 description:
+ *                   type: string
+ *                 categoryId:
+ *                   type: string
+ *                   format: uuid
+ *       401:
+ *         description: Unauthorized - User not authenticated
+ *       404:
+ *         description: Audio file not found or access denied
+ *       500:
+ *         description: Internal server error
+ *   delete:
+ *     summary: Delete audio file
+ *     description: Delete an audio file by ID
+ *     tags:
+ *       - Audio
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: fileId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID of the audio file to delete
+ *     responses:
+ *       200:
+ *         description: Audio file deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Audio file deleted successfully
+ *       401:
+ *         description: Unauthorized - User not authenticated
+ *       404:
+ *         description: Audio file not found or access denied
+ *       500:
+ *         description: Internal server error
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ fileId: string }> }

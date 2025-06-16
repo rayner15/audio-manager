@@ -4,6 +4,55 @@ import { authOptions } from '@/lib/auth';
 import { logger } from '@/lib/logger';
 import { SettingsService } from '@/services/settings.svc';
 
+/**
+ * @swagger
+ * /api/user/username:
+ *   put:
+ *     summary: Update username
+ *     description: Updates the authenticated user's username
+ *     tags:
+ *       - User
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: New username to set
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: Current password for verification
+ *     responses:
+ *       200:
+ *         description: Username updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Username updated successfully
+ *       400:
+ *         description: Bad request - Missing username or password
+ *       401:
+ *         description: Unauthorized - Invalid password or user not authenticated
+ *       404:
+ *         description: User not found
+ *       409:
+ *         description: Conflict - Username is already taken
+ *       500:
+ *         description: Internal server error
+ */
 export async function PUT(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

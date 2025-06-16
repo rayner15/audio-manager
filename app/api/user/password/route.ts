@@ -4,6 +4,54 @@ import { authOptions } from '@/lib/auth';
 import { logger } from '@/lib/logger';
 import { SettingsService } from '@/services/settings.svc';
 
+/**
+ * @swagger
+ * /api/user/password:
+ *   put:
+ *     summary: Update password
+ *     description: Updates the authenticated user's password
+ *     tags:
+ *       - User
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - currentPassword
+ *               - newPassword
+ *             properties:
+ *               currentPassword:
+ *                 type: string
+ *                 format: password
+ *                 description: Current password for verification
+ *               newPassword:
+ *                 type: string
+ *                 format: password
+ *                 description: New password to set (must be at least 8 characters)
+ *     responses:
+ *       200:
+ *         description: Password updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Password updated successfully
+ *       400:
+ *         description: Bad request - Missing passwords or new password too short
+ *       401:
+ *         description: Unauthorized - Current password is incorrect or user not authenticated
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
 export async function PUT(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

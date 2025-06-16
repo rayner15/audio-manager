@@ -4,6 +4,49 @@ import { authOptions } from '@/lib/auth';
 import { logger } from '@/lib/logger';
 import { SettingsService } from '@/services/settings.svc';
 
+/**
+ * @swagger
+ * /api/user/account:
+ *   delete:
+ *     summary: Delete user account
+ *     description: Permanently deletes the authenticated user's account
+ *     tags:
+ *       - User
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - password
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: Current password for verification
+ *     responses:
+ *       200:
+ *         description: Account deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Account deleted successfully
+ *       400:
+ *         description: Bad request - Missing password
+ *       401:
+ *         description: Unauthorized - Invalid password or user not authenticated
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
 export async function DELETE(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);

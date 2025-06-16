@@ -8,6 +8,81 @@ import { AudioService } from '@/services/audio.svc';
 
 const audioService = new AudioService();
 
+/**
+ * @swagger
+ * /api/audio/upload:
+ *   post:
+ *     summary: Upload audio file(s)
+ *     description: Upload one or multiple audio files with descriptions and categories
+ *     tags:
+ *       - Audio
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: Single audio file upload
+ *               files:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *                 description: Multiple audio files upload
+ *               categoryId:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Category ID for single file upload
+ *               'categoryIds[0]':
+ *                 type: string
+ *                 format: uuid
+ *                 description: Category ID for first file in multiple upload
+ *               'descriptions[0]':
+ *                 type: string
+ *                 description: Description for first file in multiple upload
+ *     responses:
+ *       201:
+ *         description: Audio file(s) uploaded successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Audio file(s) uploaded successfully
+ *                 audioFiles:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         format: uuid
+ *                       fileName:
+ *                         type: string
+ *                       description:
+ *                         type: string
+ *                       category:
+ *                         type: object
+ *                       sizeBytes:
+ *                         type: number
+ *                       uploadedAt:
+ *                         type: string
+ *                         format: date-time
+ *       400:
+ *         description: Bad request - Missing files or categories
+ *       401:
+ *         description: Unauthorized - User not authenticated
+ *       500:
+ *         description: Internal server error
+ */
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
