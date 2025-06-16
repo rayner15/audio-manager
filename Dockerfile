@@ -40,7 +40,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 COPY --chown=nextjs:nodejs uploads ./uploads
 
 RUN mkdir -p uploads logs
-RUN chown -R nextjs:nodejs uploads logs .nex
+RUN chown -R nextjs:nodejs uploads logs .next
 
 COPY --chown=nextjs:nodejs docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod +x /app/docker-entrypoint.sh
