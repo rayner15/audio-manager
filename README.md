@@ -38,7 +38,10 @@ NEXTAUTH_SECRET="XOF6XsWZAg4sZ68IQvBlJOXWmWi9K3txGUolSyNDUoc="
 EOL
 ```
 
-### 3. Start the Application
+### 3. Ensure Docker is Running
+Ensure **Docker Desktop** (or Docker service) is running on your system before proceeding.
+
+### 4. Start the Application
 ```bash
 docker compose up --build
 ```
