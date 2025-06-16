@@ -34,8 +34,7 @@ Create a `.env` file in the root directory:
 cat > .env << EOL
 DATABASE_URL=mysql://root:root123@localhost:3308/audioworld
 NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-super-secret-nextauth-secret-key-here"
-JWT_SECRET="your-jwt-secret-key-here"
+NEXTAUTH_SECRET="XOF6XsWZAg4sZ68IQvBlJOXWmWi9K3txGUolSyNDUoc="
 EOL
 ```
 

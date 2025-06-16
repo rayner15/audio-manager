@@ -66,6 +66,22 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Check if user is logged in and redirect from root to dashboard
+  if (pathname === '/') {
+    // Check if there's a next-auth session token in cookies
+    const sessionToken = request.cookies.get('next-auth.session-token') || 
+                        request.cookies.get('__Secure-next-auth.session-token');
+    
+    if (sessionToken) {
+      logger.info({
+        msg: 'Logged in user accessing root path, redirecting to dashboard',
+        path: pathname
+      });
+      
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+  }
+
   // Rate limiting for API routes
   if (pathname.startsWith('/api/')) {
     const rateLimitKey = getRateLimitKey(request);
