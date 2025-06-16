@@ -1,7 +1,8 @@
+import { RegisterUserInput } from '@/interface/user';
+import { processEncryptedPasswords } from '@/lib/password-utils';
+import { UserService } from '@/services/user.svc';
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '../../../lib/logger';
-import { UserService } from '@/services/user.svc';
-import { RegisterUserInput } from '@/interface/user';
 
 const userService = new UserService();
 
@@ -72,8 +73,10 @@ const userService = new UserService();
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { username, email, password, firstName, lastName } = body;
+    const encryptedData = await request.json();
+    const requestData = processEncryptedPasswords(encryptedData);
+    const { username, email, password, firstName, lastName } = requestData;
+
 
     if (!username || !email || !password) {
       return NextResponse.json(

@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { signOut } from "next-auth/react";
 import toast from "react-hot-toast";
 import Form from "@/components/form/Form";
+import { encryptPassword } from "@/lib/client-utils";
 
 interface DeleteAccountFormData {
   password: string;
@@ -37,12 +38,16 @@ const DeleteAccountForm = () => {
     const toastId = toast.loading("Deleting account...");
 
     try {
+      const encryptedData = {
+        password: encryptPassword(data.password),
+      };
+
       const response = await fetch("/api/user/account", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ password: data.password }),
+        body: JSON.stringify(encryptedData),
       });
 
       if (!response.ok) {

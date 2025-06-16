@@ -5,6 +5,7 @@ import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { encryptPassword } from "@/lib/client-utils";
 
 interface PasswordFormData {
   currentPassword: string;
@@ -44,15 +45,17 @@ const PasswordForm = () => {
     try {
       console.log("Updating password...");
 
+      const encryptedData = {
+        currentPassword: encryptPassword(data.currentPassword),
+        newPassword: encryptPassword(data.newPassword),
+      };
+
       const response = await fetch("/api/user/password", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          currentPassword: data.currentPassword,
-          newPassword: data.newPassword,
-        }),
+        body: JSON.stringify(encryptedData),
       });
 
       if (response.ok) {

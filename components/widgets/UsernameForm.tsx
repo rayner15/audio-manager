@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import Form from "@/components/form/Form";
+import { encryptPassword } from "@/lib/client-utils";
 
 interface UsernameFormData {
   username: string;
@@ -18,7 +19,6 @@ const UsernameForm = () => {
   const methods = useForm<UsernameFormData>();
 
   useEffect(() => {
-    // Safely access username if it exists in the session
     const username = (session?.user as any)?.username || "";
 
     if (username) {
@@ -32,20 +32,20 @@ const UsernameForm = () => {
     const toastId = toast.loading("Updating username...");
 
     try {
-      // Create a copy of the data for logging that doesn't include the password
-      const safeData = { username: data.username };
-      console.log("Updating username:", safeData);
+      const encryptedData = {
+        username: data.username,
+        password: encryptPassword(data.password),
+      };
 
       const response = await fetch("/api/user/username", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(encryptedData),
       });
 
       if (response.ok) {
-        // Update the form with the new values to reflect changes immediately
         methods.setValue("username", data.username);
         methods.setValue("password", "");
 

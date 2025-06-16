@@ -1,8 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { logger } from '@/lib/logger';
+import { processEncryptedPasswords } from '@/lib/password-utils';
 import { SettingsService } from '@/services/settings.svc';
+import { getServerSession } from 'next-auth/next';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * @swagger
@@ -68,9 +69,10 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: 'Invalid user session' }, { status: 401 });
     }
     
-    const { username, password } = await req.json();
+    const encryptedData = await req.json();
+    const requestData = processEncryptedPasswords(encryptedData);
+    const { username, password } = requestData;
     
-    // Validate input
     if (!username || !password) {
       return NextResponse.json({ message: 'Username and password are required' }, { status: 400 });
     }

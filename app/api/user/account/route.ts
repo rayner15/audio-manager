@@ -1,8 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { logger } from '@/lib/logger';
+import { processEncryptedPasswords } from '@/lib/password-utils';
 import { SettingsService } from '@/services/settings.svc';
+import { getServerSession } from 'next-auth/next';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * @swagger
@@ -62,9 +63,10 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ message: 'Invalid user session' }, { status: 401 });
     }
     
-    const { password } = await req.json();
+    const encryptedData = await req.json();
+    const requestData = processEncryptedPasswords(encryptedData);
+    const { password } = requestData;
     
-    // Validate input
     if (!password) {
       return NextResponse.json({ message: 'Password is required' }, { status: 400 });
     }
