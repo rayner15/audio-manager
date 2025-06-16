@@ -57,6 +57,13 @@ Username: john_doe
 Password: johndoe12345
 ```
 
+## 🎵 Supported Audio Formats
+
+- **MP3** (audio/mpeg)
+- **WAV** (audio/wav, audio/x-wav)
+
+Maximum file size: **10MB**
+
 ## 🐳 Docker Commands
 
 ```bash
@@ -128,13 +135,6 @@ npm run dev
 - **Web Application**: http://localhost:3000
 - **MySQL Database**: localhost:3308 (user: root, password: root123)
 
-## 🎵 Supported Audio Formats
-
-- **MP3** (audio/mpeg)
-- **WAV** (audio/wav, audio/x-wav)
-- **M4A** (audio/mp4, audio/m4a, audio/x-m4a)
-
-Maximum file size: **25MB**
 
 ---
 
