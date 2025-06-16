@@ -30,7 +30,6 @@ export default function AudioLibrary({
     return Array.from(uniqueCategories.values());
   }, [audioFiles]);
 
-  // Filter audio files by selected category
   const filteredAudioFiles = useMemo(() => {
     if (selectedCategory === null) return audioFiles;
     return audioFiles.filter((file) => file.category.id === selectedCategory);

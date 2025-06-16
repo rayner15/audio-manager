@@ -25,7 +25,7 @@ export default function Layout({
       case "purple":
         return "from-purple-100 via-pink-100 to-indigo-100";
       case "blue":
-        return "glass-background";
+        return "from-blue-100 via-purple-100 to-indigo-100";
       case "green":
         return "from-green-50 via-emerald-50 to-teal-50";
       default:
@@ -38,16 +38,6 @@ export default function Layout({
       className={`min-h-screen relative overflow-hidden ${
         useGradient ? `bg-gradient-to-br ${getBackgroundGradient()}` : ""
       }`}
-      style={
-        backgroundType === "blue" && useGradient
-          ? {
-              background: `radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
-                linear-gradient(155deg, #3730a3 0%, #1e40af 50%, #00d4ff 100%)`,
-            }
-          : {}
-      }
     >
       {backgroundImage && (
         <Image

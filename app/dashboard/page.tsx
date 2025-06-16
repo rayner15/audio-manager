@@ -116,12 +116,11 @@ export default function DashboardPage() {
   }
 
   return (
-    <Layout backgroundType="blue" useGradient={true}>
+    <Layout backgroundImage="/scenery.jpg" useGradient={true}>
       <div className="relative w-full h-full min-h-screen">
         <div className="relative z-10">
           <NavigationBar />
-          <div className="container mx-auto px-6 py-10">
-            {/* Welcome Section */}
+          <div className="mx-auto py-10 max-w-[1100px]">
             <motion.div
               className="mb-10"
               initial={{ opacity: 0, y: 20 }}
